@@ -6,11 +6,15 @@ import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 
-export default function RootLayout() {
+export default function RootLayout()
+{
   return (
     <SafeAreaProvider>
+      {/* Organiza as telas que forem aparecendo de forma empilhada */}
       <Stack>
-        <Stack.Screen name="index" />
+
+        {/* Alé de empilhada a tela NÂO tem o cabeçalho */}
+        <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>
     </SafeAreaProvider>
   );

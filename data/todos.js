@@ -7,7 +7,7 @@ export const data = [
     {
         "id": 1,
         "title": "Ampliar direitos",
-        "completed": false
+        "completed": true
     },
     {
         "id": 2,

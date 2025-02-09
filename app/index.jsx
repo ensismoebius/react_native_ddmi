@@ -20,8 +20,33 @@ import bobEsponja from '@/assets/images/bob.jpg';
 // Para ver mais ícones vá em: https://icons.expo.fyi/
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
+// Importando outras fontes do pacote instalado
+// pelo comando: npm i @expo-google-fonts/inter
+// https://github.com/expo/google-fonts
+import { Inter_500Medium, useFonts } from "@expo-google-fonts/inter";
+
 export default function Index()
 {
+
+  /**
+   * Declarando os hooks do react native, lembre-se de que
+   * tais hooks não devem ter sua quantidade ou ordem alteradas
+   * durante entre as renderizações de um componente.
+   * 
+   * Um hook é uma função que você chama dentro do seu
+   * componente de forma que o framework monitora seu 
+   * estado entre renderizações, sendo possível assim, por
+   * exemplo fazer um contador que mantém seu valor ao
+   * alternar entre telas.
+   * 
+   * Exemplos:
+   * useState → "Memoriza valores"
+   * useEffect → "Executa tarefas que são executadas fora do contexto de execução do componente"
+   * useContext → "Compartilha informação"
+   * 
+   * Hooks devem ser chamados sempre dentro do componente em questão
+   */
+
 
   // Cria um estado que pode ser guardado enquanto o programa
   // está sendo executado, "todos" é a variavel criada que 
@@ -36,7 +61,14 @@ export default function Index()
   // Mesmas coisa aqui
   const [text, setText] = useState('');
 
-  // 2 42 32 
+  // Carrega a fonte
+  const [loaded, error] = useFonts({ Inter_500Medium });
+  if (!loaded && !error)
+  {
+    return null;
+  }
+
+  /* fim dos hooks */
 
   // Função para alternar o todo
   const toggleTodo = (id) =>
@@ -136,6 +168,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
+    width: '100%'
   },
   inputContainer: {
     flexGrow: 1,
@@ -156,13 +189,14 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 10,
     fontSize: 18,
+    fontFamily: 'Inter_500Medium',
     minWidth: 0,
     color: 'white'
   },
   addButton: {
     backgroundColor: 'white',
     borderRadius: 5,
-    padding: 10,
+    padding: 10
   },
   addButtonText: {
     fontSize: 18,
@@ -184,6 +218,7 @@ const styles = StyleSheet.create({
   todoText: {
     flex: 1,
     fontSize: 18,
+    fontFamily: 'Inter_500Medium',
     color: 'white'
   },
   completedText: {

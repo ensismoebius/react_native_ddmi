@@ -28,8 +28,11 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 // https://github.com/expo/google-fonts
 import { Inter_500Medium, useFonts } from "@expo-google-fonts/inter";
 
-// Some icons used for the them swhitch toggle button
+// Alguns ícones usados para o botão de alternância entre temas
 import Octicons from '@expo/vector-icons/Octicons';
+
+// Componentes que permitem animação
+import Animated, { LinearTransition } from "react-native-reanimated";
 
 export default function Index()
 {
@@ -173,18 +176,22 @@ export default function Index()
           }
           style={{ marginLeft: 10 }}
         >
-          {
-            colorScheme === 'dark'
-              ? <Octicons name="moon" size={36} color={theme.text} selectable={undefined} style={{ width: 36 }} />
-              : <Octicons name="sun" size={36} color={theme.text} selectable={undefined} style={{ width: 36 }} />
-          }
+          <Text>
+            {
+              colorScheme === 'dark'
+                ? <Octicons name="moon" size={36} color={theme.text} selectable={undefined} style={{ width: 36 }} />
+                : <Octicons name="sun" size={36} color={theme.text} selectable={undefined} style={{ width: 36 }} />
+            }
+          </Text>
         </Pressable>
       </View>
-      <FlatList
+      <Animated.FlatList
         data={todos}
         renderItem={renderItem}
         keyExtractor={todo => todo.id}
         contentContainerStyle={{ flexGrow: 1 }}
+        itemLayoutAnimation={LinearTransition}
+        keyboardDismissMode="on-drag"
       />
     </SafeAreaView >
   );

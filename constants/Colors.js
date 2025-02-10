@@ -3,12 +3,14 @@ export const Colors = {
         text: 'black',
         background: 'white',
         icon: 'black',
-        button: 'royalblue'
+        button: 'royalblue',
+        buttonText: 'white'
     },
     dark: {
         text: 'white',
-        background: '#000',
+        background: 'black',
         icon: 'red',
-        button: 'white'
+        button: 'white',
+        buttonText: 'black'
     },
 };

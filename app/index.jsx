@@ -1,4 +1,4 @@
-import { Text, View, TextInput, Pressable, ImageBackground, StyleSheet, FlatList } from "react-native";
+import { Text, View, TextInput, Pressable, StyleSheet, FlatList } from "react-native";
 
 // Componente que garante que o conteúdo seja mostrado em uma
 // área "segura", ou seja que não seja coberta por algum outro 
@@ -35,8 +35,6 @@ export default function Index()
 
   // Mesmas coisa aqui
   const [text, setText] = useState('');
-
-  // 2 42 32 
 
   // Função para alternar o todo
   const toggleTodo = (id) =>

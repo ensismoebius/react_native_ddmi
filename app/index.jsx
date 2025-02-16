@@ -6,6 +6,12 @@ import { Text, View, TextInput, Pressable, ImageBackground, StyleSheet, FlatList
 // SafeAreaProvider pois usa os dados fornecidos pelo mesmo
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// Garante que a barra de status do 
+// app apareça na cor correta
+// O código componente raíz do app deve conter:
+// <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+import { StatusBar } from "expo-status-bar";
+
 // Permite o armazenamento e gerenciamento de estados
 // dos componentes
 import { useContext, useState } from "react";
@@ -34,6 +40,16 @@ import Octicons from '@expo/vector-icons/Octicons';
 // Componentes que permitem animação
 import Animated, { LinearTransition } from "react-native-reanimated";
 
+// Usado para habilitar o armazenamento local assincrono do tipo "key-value",
+// mais conhecido como "chave-valor". É possível usar outras formas de
+// armazenamento como sqlite. Para mais informações veja:
+// https://docs.expo.dev/develop/user-interface/store-data/
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//Usado para executar código no esquema "callback"
+import { useEffect } from "react";
+
+
 export default function Index()
 {
 
@@ -58,13 +74,23 @@ export default function Index()
 
 
   // Cria um estado que pode ser guardado enquanto o programa
-  // está sendo executado, "todos" é a variavel criada que 
+  // está sendo executado. "todos" é a variavel criada que 
   // conterá o estado e "setTodos" é a função que vai atualizar 
-  // esse estado
+  // esse estado. Usamos "useState" pois com esse hook quando 
+  // "todo" é atualizado via "setTodos" os componentes afetados
+  // renderizam novamente mostrando o estado atual da lista. 
+  // Isso não aconteceria se simplesmente atualizássemos um
+  // array comum diretamente.
   const [todos, setTodos] = useState(
-    data.sort(
-      (a, b) => b.id - a.id
-    )
+    // A linha abaixo está comentada pois não
+    // queremos mostrar os dados pré-carregados
+    // na variável "data". Os dados pré-carregados
+    // serão usados caso e usuarie não tenha salvo
+    // coisa alguma @see fetchData
+    // data.sort((a, b) => b.id - a.id)
+
+    // O estado inicial é uma lista vazia
+    []
   );
 
   // Mesmas coisa aqui
@@ -74,6 +100,58 @@ export default function Index()
   // usaremos isso para mudar, via um botão, o tema do app.
   // Acessa os valores ATUAIS do Provider (não o valor padrão!)
   const { colorScheme, setColorScheme, theme } = useContext(ThemeContext);
+
+  // Hook usado para carregar de forma assincrona os dados 
+  // da lista de afazeres. 
+  // O hook "useEffect" é chamado automaticamente uma única vez 
+  // depois do componente terminar de renderizar. Execuções 
+  // posteriores serão feitas caso uma das depências mude.
+  useEffect(() =>
+  {
+    const fetchData = async () =>
+    {
+      try
+      {
+        const jsonValue = await AsyncStorage.getItem("TodoApp");
+        const storageTodos = jsonValue != null ? JSON.parse(jsonValue) : null;
+
+        if (storageTodos?.length)
+        {
+          setTodos(storageTodos.sort((a, b) => b.id - a.id));
+        } else
+        {
+          setTodos(data.sort((a, b) => b.id - a.id));
+        }
+
+      } catch (error)
+      {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [data]);
+
+  // Hook usado para salvar de forma assincrona os dados 
+  // da lista de afazeres. 
+  // O hook "useEffect" é chamado automaticamente uma única vez 
+  // depois do componente terminar de renderizar. Execuções 
+  // posteriores serão feitas caso uma das depências mude.
+  useEffect(() =>
+  {
+    const storeDate = async () =>
+    {
+      try
+      {
+        const jsonValue = JSON.stringify(todos);
+        await AsyncStorage.setItem("TodoApp", jsonValue);
+      } catch (error)
+      {
+        console.error(error);
+      }
+    };
+    storeDate();
+  }, [todos]);
+
 
   // Carrega a fonte
   const [loaded, error] = useFonts({ Inter_500Medium });
@@ -193,6 +271,7 @@ export default function Index()
         itemLayoutAnimation={LinearTransition}
         keyboardDismissMode="on-drag"
       />
+      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
     </SafeAreaView >
   );
 }

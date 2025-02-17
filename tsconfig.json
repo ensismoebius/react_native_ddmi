@@ -9,11 +9,10 @@
     }
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.jsx",
+    "**/*.ts", // Carrega todos os arquivos typescript em qualquer diretório
+    "**/*.tsx", // Carrega todos os arquivos typescript em qualquer diretório
+    "**/*.jsx", // Carrega todos os arquivos javascript em qualquer diretório
     ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "constants/Colors.js"
+    "expo-env.d.ts"
   ]
 }

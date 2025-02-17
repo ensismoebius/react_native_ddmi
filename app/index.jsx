@@ -50,6 +50,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from "react";
 
 
+// Pouco importa o nome dessa função contanto que 
+// ela seja a função padrão dessa tela. O que define
+// a página inicial do app é o nome do arquivo:
+//  "index.jsx" ou "index.tsx"
 export default function Index()
 {
 

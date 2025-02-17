@@ -12,19 +12,14 @@ export default function RootLayout()
   return (
     // Envolve os elementos do app para que tenha acesso ao 
     // contexto ligado a esse Provider
-    < ThemeProvider >
+    <ThemeProvider>
       <SafeAreaProvider>
         {/* Organiza as telas que forem aparecendo de forma empilhada */}
         <Stack>
+          {/* Além de empilhada a tela tem o cabeçalho */}
+          <Stack.Screen name="index" options={{ headerShown: true }} />
           {/* Além de empilhada a tela NÂO tem o cabeçalho */}
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-
-          {/* Além de empilhada a tela NÂO tem o cabeçalho */}
-          {/*
-          Aqui é importante informar se a rota 
-          "admin" vai ter ou não cabeçalhos por padrão 
-          */}
-          <Stack.Screen name="admin" options={{ headerShown: false }} />
+          <Stack.Screen name="status" options={{ headerShown: false }} />
         </Stack>
       </SafeAreaProvider>
     </ThemeProvider >

@@ -15,7 +15,16 @@ export default function RootLayout()
     < ThemeProvider >
       <SafeAreaProvider>
         {/* Organiza as telas que forem aparecendo de forma empilhada */}
+        {/*
+        Se quiser aplicar "headerShown: false" para todas as telas.
+        Use <Stack screenOptions={{ headerShown: false }}>
+        */}
         <Stack>
+
+          {/*******************
+          ** Rotas estáticas **
+          *********************/}
+
           {/* Além de empilhada a tela NÂO tem o cabeçalho */}
           <Stack.Screen name="index" options={{ headerShown: false }} />
 
@@ -25,6 +34,13 @@ export default function RootLayout()
           "admin" vai ter ou não cabeçalhos por padrão 
           */}
           <Stack.Screen name="admin" options={{ headerShown: false }} />
+
+          {/*******************
+          ** Rotas dinâmicas **
+          *********************/}
+
+          <Stack.Screen name="todos/[id]" options={{ headerShown: false }} />
+
         </Stack>
       </SafeAreaProvider>
     </ThemeProvider >

@@ -12,6 +12,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 // <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
 import { StatusBar } from "expo-status-bar";
 
+// Permite o acesso de outras telas usando 
+// o roteamento por pastas e arquivos
+import { useRouter } from "expo-router";
+
 // Permite o armazenamento e gerenciamento de estados
 // dos componentes
 import { useContext, useState } from "react";
@@ -156,6 +160,8 @@ export default function Index()
     storeDate();
   }, [todos]);
 
+  // Cria o objeto de roteamento
+  const router = useRouter();
 
   // Carrega a fonte
   const [loaded, error] = useFonts({ Inter_500Medium });
@@ -213,19 +219,40 @@ export default function Index()
   const renderItem = ({ item }) =>
   (
     <View style={styles.todoItem}>
-      <Text
-        style={[
-          styles.todoText,
-          item.completed && styles.completedText
-        ]}
+      {/*
+      <Text> não dá suporte a "long press"
+      por isso o <Pressable> em volta dele.
+      */}
+      <Pressable
+
+        // Marca ou desmarca o todo
         onPress={
           () =>
           {
             toggleTodo(item.id);
           }
-        }>
-        {item.title}
-      </Text>
+        }
+
+        // Acessa a rota
+        onLongPress={
+          () =>
+          {
+            // Acessa a rota para editar o todo.
+            // É importante usar o acento grave
+            // para definir um template de string
+            router.push(`/todos/${item.id}`);
+          }
+        }
+      >
+        <Text
+          style={[
+            styles.todoText,
+            item.completed && styles.completedText
+          ]}
+        >
+          {item.title}
+        </Text>
+      </Pressable>
       <Pressable onPress={() => removeTodo(item.id)}>
         <MaterialCommunityIcons
           name="delete-circle"

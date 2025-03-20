@@ -5,6 +5,7 @@ export default function RootLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="consultaCEP" options={{ headerShown: false }} />
+      <Stack.Screen name="postGetPhp" options={{ headerShown: false }} />
     </Stack>
   );
 }

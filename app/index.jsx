@@ -15,6 +15,10 @@ export default function Index()
   {
     roteador.push('/postJson');
   }
+  function abreGetPostPhp()
+  {
+    roteador.push('/postGetPhp');
+  }
 
   return (
     <View
@@ -27,6 +31,7 @@ export default function Index()
       <Text>Escolha as ações abaixo:</Text>
       <Button title="Consultar CEP" onPress={abreConsultaCEP} />
       <Button title="Enviar dados" onPress={abrePost} />
+      <Button title="GET e POST com php" onPress={abreGetPostPhp} />
     </View>
   );
 }

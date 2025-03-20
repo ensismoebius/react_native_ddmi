@@ -11,6 +11,10 @@ export default function Index()
   {
     roteador.push('/consultaCEP');
   }
+  function abrePost()
+  {
+    roteador.push('/postJson');
+  }
 
   return (
     <View
@@ -22,6 +26,7 @@ export default function Index()
     >
       <Text>Escolha as ações abaixo:</Text>
       <Button title="Consultar CEP" onPress={abreConsultaCEP} />
+      <Button title="Enviar dados" onPress={abrePost} />
     </View>
   );
 }

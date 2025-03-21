@@ -1,91 +1,99 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, ActivityIndicator } from 'react-native';
 
-const API_URL = "http://localhost/api.php"; // Replace with your actual server URL
+const API_URL = "http://localhost/api.php"; // Endereço da API
+const API_KEY = "re98wr6ew8r6rew76r89e6rwer6w98r6ywe9r6r6w87e9wr6ew06r7"; // Chave de acesso da API
 
-const ApiInteraction = () =>
+const postGetPhp = () =>
 {
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [name, setName] = useState("");
+    const [dados, setDados] = useState(null);
+    const [carregando, setCarregando] = useState(false);
+    const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
 
-    // Function to make GET request
-    const fetchData = async () =>
+    // GET com chave de API
+    const carregarDados = async () =>
     {
-        setLoading(true);
+        setCarregando(true);
         try
         {
-            const response = await fetch(API_URL);
-            const json = await response.json();
-            setData(json);
-        } catch (error)
+            const resposta = await fetch(API_URL, {
+                method: "GET",
+                headers: {
+                    "X-API-KEY": API_KEY,
+                },
+            });
+
+            const json = await resposta.json();
+            setDados(json);
+        } catch (erro)
         {
-            console.error("Error fetching data:", error);
-            alert("Failed to fetch data.");
+            console.error("Erro ao carregar os dados:", erro);
+            alert("Falha ao carregar dados.");
         } finally
         {
-            setLoading(false);
+            setCarregando(false);
         }
     };
 
-    // Function to make POST request
-    const sendData = async () =>
+    // POST com chave de API
+    const enviaDados = async () =>
     {
-        setLoading(true);
+        setCarregando(true);
         try
         {
-            const response = await fetch(API_URL, {
+            const resposta = await fetch(API_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "X-API-KEY": API_KEY,
                 },
-                body: JSON.stringify({ name, email }),
+                body: JSON.stringify({ name: nome, email }),
             });
 
-            const json = await response.json();
-            setData(json);
-        } catch (error)
+            const json = await resposta.json();
+            setDados(json);
+        } catch (erro)
         {
-            console.error("Error sending data:", error);
-            alert("Failed to send data.");
+            console.error("Erro ao enviar informação:", erro);
+            alert("Falha no envio da informação.");
         } finally
         {
-            setLoading(false);
+            setCarregando(false);
         }
     };
 
     return (
         <View style={{ padding: 20 }}>
-            <Text>📥 Fetch Data from PHP (GET)</Text>
-            <Button title="Fetch Data" onPress={fetchData} />
+            <Text>📥 Carrega os dados do php usando GET</Text>
+            <Button title="Carregar dados" onPress={carregarDados} />
 
-            <Text>📤 Send Data to PHP (POST)</Text>
+            <Text>📤 Envia dados ao php com POST</Text>
             <TextInput
-                value={name}
-                onChangeText={setName}
-                placeholder="Enter Name"
+                value={nome}
+                onChangeText={setNome}
+                placeholder="Nome"
                 style={{ borderWidth: 1, padding: 10, marginVertical: 5, borderRadius: 5 }}
             />
             <TextInput
                 value={email}
                 onChangeText={setEmail}
-                placeholder="Enter Email"
+                placeholder="Email"
                 keyboardType="email-address"
                 style={{ borderWidth: 1, padding: 10, marginVertical: 5, borderRadius: 5 }}
             />
-            <Button title="Send Data" onPress={sendData} />
+            <Button title="Enviar" onPress={enviaDados} />
 
-            {loading && <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />}
+            {carregando && <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />}
 
-            {data && (
+            {dados && (
                 <View style={{ marginTop: 20 }}>
-                    <Text>📝 Response:</Text>
-                    <Text>{JSON.stringify(data, null, 2)}</Text>
+                    <Text>📝 Resposta do servidor:</Text>
+                    <Text>{JSON.stringify(dados, null, 2)}</Text>
                 </View>
             )}
         </View>
     );
 };
 
-export default ApiInteraction;
+export default postGetPhp;

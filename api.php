@@ -9,7 +9,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
-    // Handle GET request (example: fetch user details)
+    // Handle GET request (example: fetch user details)'
     $response = [
         "message" => "GET request received!",
         "status" => "success",

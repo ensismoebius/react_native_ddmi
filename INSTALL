@@ -1,0 +1,2 @@
+npm install react-leaflet leaflet --legacy-peer-deps
+npm install react-native-maps --legacy-peer-deps

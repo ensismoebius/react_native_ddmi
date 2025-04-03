@@ -1,40 +1,66 @@
-import { Button, FlatList, Text, TextInput, View } from "react-native";
-// Permite o armazenamento e gerenciamento de estados
-// dos componentes
 import { useState } from "react";
+import { Button, FlatList, Text, TextInput, View } from "react-native";
 
 // Carrrega os dados que serão mostrados
-import { dados } from "@/dados/afazeres";
+import { listaDeAfazeres } from "@/dados/afazeres";
 
-export default function Afazeres()
+export default function Index()
 {
+    const [nomeDaTarefa, setNomeDaTarefa] = useState('');
+
     // Cria um estado que pode ser guardado enquanto o programa
-    // está sendo executado, "todos" é a variavel criada que 
-    // conterá o estado e "setTodos" é a função que vai atualizar 
+    // está sendo executado, "afazeres" é a variavel criada que 
+    // conterá o estado e "setAfazeres" é a função que vai atualizar 
     // esse estado
     const [afazeres, setAfazeres] = useState(
-        dados.sort(
+        listaDeAfazeres.sort(
             (a, b) => b.id - a.id
         )
     );
 
-    // Mesmas coisas aqui
-    const [tarefa, setTarefa] = useState('');
+    // O layout do item que será mostrado
+    // perceba que o corpo da função anônima
+    // começa com parênteses eliminando assim 
+    // a necessidade do "return"
+    const layoutDoItem = ({ item }) =>
+    (
+        <View>
+            <Text>{item.title}</Text>
+            <Button title="x" />
+        </View>
+    );
+
+    // função para adicionar tarefa
+    const adicionarAfazeres = () =>
+    {
+        if (nomeDaTarefa.trim())
+        {
+            const newId = afazeres.length > 0 ? afazeres[0].id + 1 : 0;
+
+            setAfazeres(
+                [{ id: newId, title: nomeDaTarefa, completed: false }, ...afazeres]
+            );
+
+            setNomeDaTarefa('');
+        }
+    };
 
     return (
         <View>
-            <Text>Digite uma tarefa</Text>
             <TextInput
-                placeholder="Tarefa"
+                placeholder="Digite uma tarefa"
                 placeholderTextColor="gray"
-                value={tarefa}
-                onChangeText={setTarefa}
+                value={nomeDaTarefa}
+                onChangeText={setNomeDaTarefa}
             />
-            <Button title="Adicionar" />
-
+            <Button
+                onPress={adicionarAfazeres}
+                title="Adicionar"
+            />
             <FlatList
                 data={afazeres}
-                keyExtractor={tarefa => tarefa.id}
+                renderItem={layoutDoItem}
+                keyExtractor={item => item.id}
                 contentContainerStyle={{ flexGrow: 1 }}
             />
         </View>

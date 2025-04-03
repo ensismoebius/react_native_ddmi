@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, FlatList, Text, TextInput, View } from "react-native";
+
 // Carrrega os dados que serão mostrados
 import { listaDeAfazeres } from "@/dados/afazeres";
 
@@ -34,9 +35,11 @@ export default function Index()
     {
         if (nomeDaTarefa.trim())
         {
-            const newId = listaDeAfazeres.length > 0 ? afazeres[0].id + 1 : 0;
+            const newId = afazeres.length > 0 ? afazeres[0].id + 1 : 0;
 
-            setAfazeres([{ id: newId, title: nomeDaTarefa, completed: false }, ...listaDeAfazeres]);
+            setAfazeres(
+                [{ id: newId, title: nomeDaTarefa, completed: false }, ...afazeres]
+            );
 
             setNomeDaTarefa('');
         }
@@ -50,10 +53,15 @@ export default function Index()
                 value={nomeDaTarefa}
                 onChangeText={setNomeDaTarefa}
             />
-            <Button />
+            <Button
+                onPress={adicionarAfazeres}
+                title="Adicionar"
+            />
             <FlatList
-                data={listaDeAfazeres}
+                data={afazeres}
                 renderItem={layoutDoItem}
+                keyExtractor={item => item.id}
+                contentContainerStyle={{ flexGrow: 1 }}
             />
         </View>
     );

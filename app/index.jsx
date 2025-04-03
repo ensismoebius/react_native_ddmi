@@ -1,18 +1,16 @@
-import { useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 export default function Index()
 {
-  const roteador = useRouter();
-  function abreAfazeres()
-  {
-    roteador.push('/afazeres');
-  }
-
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Text>Edit app/index.tsx to edit this screen.</Text>
-      <Button onPress={abreAfazeres} title="Abre afazeres" />
     </View>
   );
 }

@@ -22,6 +22,7 @@ export default function cep()
 
 
         await fetch(`https://viacep.com.br/ws/${valorDoCep}/json/`)
+            //.then(resposta => resposta.json()) tava faltando isso!
             .then(
                 dadoEmJson =>
                 {

@@ -5,6 +5,12 @@ export default function Index()
 {
 
   const roteador = useRouter();
+
+  function vaiParaOCep()
+  {
+    roteador.push("/cep");
+  }
+
   function vaiParaOsAfazeres()
   {
     roteador.push("/afazeres");
@@ -12,7 +18,13 @@ export default function Index()
 
   return (
     <View>
-      <button onClick={vaiParaOsAfazeres} >Afazeres</button>
+      <Button onClick={vaiParaOsAfazeres} >Afazeres</Button>
+
+      <Button
+        title="Vai para cep"
+        onPress={vaiParaOCep}
+      />
+
       <Text>Edit app/index.tsx to edit this screen.</Text>
     </View>
   );

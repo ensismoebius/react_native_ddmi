@@ -1,4 +1,4 @@
-export const dados = [
+export const listaDeAfazeres = [
     {
         "id": 0,
         "title": "Organizar a sociedade",

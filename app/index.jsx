@@ -18,7 +18,7 @@ export default function Index()
 
   return (
     <View>
-      <Button onClick={vaiParaOsAfazeres} >Afazeres</Button>
+      <Button onClick={vaiParaOsAfazeres} title="Afazeres" />
 
       <Button
         title="Vai para cep"

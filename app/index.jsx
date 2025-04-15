@@ -16,6 +16,11 @@ export default function Index()
     roteador.push("/afazeres");
   }
 
+  function vaiParaMinhaAPI()
+  {
+    roteador.push("/minhaAPI");
+  }
+
   return (
     <View>
       <Button onClick={vaiParaOsAfazeres} title="Afazeres" />
@@ -23,6 +28,11 @@ export default function Index()
       <Button
         title="Vai para cep"
         onPress={vaiParaOCep}
+      />
+
+      <Button
+        title="Vai para minha API"
+        onPress={vaiParaMinhaAPI}
       />
 
       <Text>Edit app/index.tsx to edit this screen.</Text>

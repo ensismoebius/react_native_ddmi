@@ -8,10 +8,17 @@ export default function Index()
   {
     roteador.push("/cep");
   }
+
+  function vaiParaMinhaAPI()
+  {
+    roteador.push("/minhaAPI");
+  }
+
   return (
     <View>
       <Text>API do CEP</Text>
       <Button title="Abrir CEP" onPress={vaiParaOCep} />
+      <Button title="Abrir Minha API" onPress={vaiParaMinhaAPI} />
     </View>
   );
 }

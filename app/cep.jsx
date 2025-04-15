@@ -22,17 +22,19 @@ export default function cep()
 
 
         await fetch(`https://viacep.com.br/ws/${valorDoCep}/json/`)
-            //.then(resposta => resposta.json()) tava faltando isso!
+            .then(resposta => resposta.json()) // tava faltando isso!
             .then(
                 dadoEmJson =>
                 {
                     if (dadoEmJson.erro)
                     {
                         setValorDoCep("CEP não existe");
+                        setCarregando(false);
                     } else
                     {
                         // Deu certo
                         setDados(dadoEmJson);
+                        setCarregando(false);
                     }
                 }
             );
@@ -54,7 +56,10 @@ export default function cep()
 
             {dados &&
                 <View>
-                    <Text>Endereço: {JSON.stringify(dados)}</Text>
+                    <Text>📍 Endereço: {dados.logradouro}</Text>
+                    <Text>🏙 Bairro: {dados.bairro}</Text>
+                    <Text>🌆 Cidade: {dados.localidade}</Text>
+                    <Text>🗺 Estado: {dados.uf}</Text>
                 </View>
             }
 

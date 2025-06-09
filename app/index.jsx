@@ -6,6 +6,11 @@ export default function Index()
 
   const roteador = useRouter();
 
+  function teste()
+  {
+    roteador.push('/teste');
+  }
+
   function abreMapa01()
   {
     roteador.push('/mapa01');
@@ -83,6 +88,7 @@ export default function Index()
       <Button title="Mapa1" onPress={abreMapa01} />
       <Button title="Mapa2" onPress={abreMapa02} />
       <Button title="Mapa3" onPress={abreMapa03} />
+      <Button title="Teste" onPress={teste} />
     </View>
   );
 }

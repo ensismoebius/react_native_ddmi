@@ -2,6 +2,7 @@
 // npm install expo-sensor
 // npm install victory
 // npm install react-native-maps
+// npm install @expo/ngrok@^4.1.0
 
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';

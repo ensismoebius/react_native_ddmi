@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, StyleSheet } from 'react-native';
 import { Magnetometer } from 'expo-sensors';
-import { VictoryChart, VictoryLine, VictoryAxis, VictoryTheme } from 'victory';
+import { VictoryChart, VictoryLine, VictoryAxis, VictoryTheme } from 'victory-native';
 
 const MAX_POINTS = 100;
 

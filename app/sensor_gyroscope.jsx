@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Gyroscope } from 'expo-sensors';
-import { VictoryChart, VictoryLine, VictoryAxis, VictoryTheme } from 'victory';
+import { VictoryChart, VictoryLine, VictoryAxis, VictoryTheme } from 'victory-native';
 
 const MAX_POINTS = 100;
 

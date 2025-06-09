@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Button } from 'react-native';
+import { View, StyleSheet, TextInput, Button, SafeAreaView, Platform, StatusBar } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 export default function MapScreen()
@@ -9,10 +9,12 @@ export default function MapScreen()
     const [mapCoords, setMapCoords] = useState(null);
     const [marker, setMarker] = useState(null);
 
-    const handleGoToLocation = () => {
+    const handleGoToLocation = () =>
+    {
         const lat = parseFloat(latitude);
         const lon = parseFloat(longitude);
-        if (!isNaN(lat) && !isNaN(lon)) {
+        if (!isNaN(lat) && !isNaN(lon))
+        {
             setMapCoords({ latitude: lat, longitude: lon });
             setMarker({ latitude: lat, longitude: lon }); // This line sets the marker
         }
@@ -20,18 +22,26 @@ export default function MapScreen()
 
     // Generate OSM URL with marker if marker is set
     let osmUrl = 'https://www.openstreetmap.org';
-    if (mapCoords) {
-        if (marker) {
+    if (mapCoords)
+    {
+        if (marker)
+        {
             // OSM marker: https://www.openstreetmap.org/?mlat=LAT&mlon=LON#map=15/LAT/LON
             // This line adds the marker to the OpenStreetMap URL
             osmUrl = `https://www.openstreetmap.org/?mlat=${marker.latitude}&mlon=${marker.longitude}#map=15/${mapCoords.latitude}/${mapCoords.longitude}`;
-        } else {
+        } else
+        {
             osmUrl = `https://www.openstreetmap.org/#map=15/${mapCoords.latitude}/${mapCoords.longitude}`;
         }
     }
 
+    // Calculate bottom padding for Android navigation bar
+    const androidNavBarHeight = Platform.OS === 'android' ? 48 : 0; // 48 is a common nav bar height
+    const statusBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight || 0 : 0;
+
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={[styles.container, { paddingBottom: androidNavBarHeight }]}> 
+            <WebView source={{ uri: osmUrl }} style={styles.map} />
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
@@ -49,8 +59,7 @@ export default function MapScreen()
                 />
                 <Button title="Go" onPress={handleGoToLocation} />
             </View>
-            <WebView source={{ uri: osmUrl }} style={styles.map} />
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -70,7 +79,6 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         marginRight: 8,
         paddingHorizontal: 8,
-        height: 40,
         backgroundColor: '#f9f9f9',
     },
     map: { flex: 1 },

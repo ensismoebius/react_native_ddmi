@@ -12,10 +12,15 @@
       "supportsTablet": true
     },
     "android": {
+      "permissions": [
+        "ACTIVITY_RECOGNITION",
+        "ACTIVITY_RECOGNITION"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ensismoebius.ddmi"
     },
     "web": {
       "bundler": "metro",

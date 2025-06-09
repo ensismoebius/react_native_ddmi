@@ -6,6 +6,21 @@ export default function Index()
 
   const roteador = useRouter();
 
+  function abreMapa01()
+  {
+    roteador.push('/mapa01');
+  }
+
+  function abreMapa02()
+  {
+    roteador.push('/mapa02');
+  }
+
+    function abreMapa03()
+  {
+    roteador.push('/mapa03');
+  }
+
   function abreGPS01()
   {
     roteador.push('/gps01');
@@ -65,6 +80,9 @@ export default function Index()
       <Button title="Magnetômetro" onPress={abreMagnetometro} />
       <Button title="GPS1" onPress={abreGPS01} />
       <Button title="GPS2" onPress={abreGPS02} />
+      <Button title="Mapa1" onPress={abreMapa01} />
+      <Button title="Mapa2" onPress={abreMapa02} />
+      <Button title="Mapa3" onPress={abreMapa03} />
     </View>
   );
 }

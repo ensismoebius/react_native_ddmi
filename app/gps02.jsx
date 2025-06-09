@@ -1,3 +1,8 @@
+// npm install expo-location
+// npm install expo-sensor
+// npm install victory
+// npm install react-native-maps
+
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import * as Location from 'expo-location';

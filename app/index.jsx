@@ -1,16 +1,23 @@
 import { useRouter } from "expo-router";
 import { Button, Text, View } from "react-native";
 
-export default function Index()
-{
+export default function Index() {
   const roteador = useRouter();
-  function vaiParaOCep()
-  {
+
+
+  function vaiParaOMapa01() {
+    roteador.push("/mapa01");
+  }
+
+  function vaiParaOMapa02() {
+    roteador.push("/mapa02");
+  }
+
+  function vaiParaOCep() {
     roteador.push("/cep");
   }
 
-  function vaiParaMinhaAPI()
-  {
+  function vaiParaMinhaAPI() {
     roteador.push("/minhaAPI");
   }
 
@@ -19,6 +26,9 @@ export default function Index()
       <Text>API do CEP</Text>
       <Button title="Abrir CEP" onPress={vaiParaOCep} />
       <Button title="Abrir Minha API" onPress={vaiParaMinhaAPI} />
+
+      <Button title="Abrir Mapa 01" onPress={vaiParaOMapa01} />
+      <Button title="Abrir Mapa 02" onPress={vaiParaOMapa02} />
     </View>
   );
 }

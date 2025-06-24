@@ -67,6 +67,11 @@ export default function Index()
     roteador.push('/sensor_magnetometer');
   }
 
+  function abreNotificacoes()
+  {
+    roteador.push('/notificacoes');
+  }
+
   return (
     <View
       style={{
@@ -89,6 +94,7 @@ export default function Index()
       <Button title="Mapa2" onPress={abreMapa02} />
       <Button title="Mapa3" onPress={abreMapa03} />
       <Button title="Teste" onPress={teste} />
+      <Button title="Notificações" onPress={abreNotificacoes} />
     </View>
   );
 }

@@ -1,23 +1,23 @@
 import { useRouter } from "expo-router";
 import { Text, View, Button } from "react-native";
 
-export default function Index()
-{
+export default function Index() {
 
   const roteador = useRouter();
 
-  function vaiParaOCep()
-  {
+  function vaiParaNotificacoes() {
+    roteador.push("/notificacoes");
+  }
+
+  function vaiParaOCep() {
     roteador.push("/cep");
   }
 
-  function vaiParaOsAfazeres()
-  {
+  function vaiParaOsAfazeres() {
     roteador.push("/afazeres");
   }
 
-  function vaiParaMinhaAPI()
-  {
+  function vaiParaMinhaAPI() {
     roteador.push("/minhaAPI");
   }
 
@@ -33,6 +33,11 @@ export default function Index()
       <Button
         title="Vai para minha API"
         onPress={vaiParaMinhaAPI}
+      />
+
+      <Button
+        title="Vai para notificações"
+        onPress={vaiParaNotificacoes}
       />
 
       <Text>Edit app/index.tsx to edit this screen.</Text>

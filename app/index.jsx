@@ -1,75 +1,68 @@
 import { useRouter } from "expo-router";
 import { Button, Text, View } from "react-native";
 
-export default function Index()
-{
+export default function Index() {
 
   const roteador = useRouter();
 
-  function teste()
-  {
+  function teste() {
     roteador.push('/teste');
   }
 
-  function abreMapa01()
-  {
+  function abreMapa01() {
     roteador.push('/mapa01');
   }
 
-  function abreMapa02()
-  {
+  function abreMapa02() {
     roteador.push('/mapa02');
   }
 
-    function abreMapa03()
-  {
+  function abreMapa03() {
     roteador.push('/mapa03');
   }
 
-  function abreGPS01()
-  {
+  function abreGPS01() {
     roteador.push('/gps01');
   }
 
-  function abreGPS02()
-  {
+  function abreGPS02() {
     roteador.push('/gps02');
   }
 
-  function abreConsultaCEP()
-  {
+  function abreConsultaCEP() {
     roteador.push('/consultaCEP');
   }
-  function abrePost()
-  {
+  function abrePost() {
     roteador.push('/postJson');
   }
-  function abreGetPostPhp()
-  {
+  function abreGetPostPhp() {
     roteador.push('/postGetPhp');
   }
-  function abreAcelerometro()
-  {
+  function abreAcelerometro() {
     roteador.push('/sensor_accell');
   }
 
-  function abreMovimentacao()
-  {
+  function abreMovimentacao() {
     roteador.push('/sensor_motion');
   }
 
-  function abreGisroscopio()
-  {
+  function abreGisroscopio() {
     roteador.push('/sensor_gyroscope');
   }
-  function abreMagnetometro()
-  {
+  function abreMagnetometro() {
     roteador.push('/sensor_magnetometer');
   }
 
-  function abreNotificacoes()
-  {
+  function abreNotificacoes() {
     roteador.push('/notificacoes');
+  }
+
+ function abreNotificacoes2() {
+    roteador.push('/notificacoes2');
+  }
+
+  function abreNotificacoes3() {
+    roteador.push('/notificacoes3');
   }
 
   return (
@@ -94,7 +87,9 @@ export default function Index()
       <Button title="Mapa2" onPress={abreMapa02} />
       <Button title="Mapa3" onPress={abreMapa03} />
       <Button title="Teste" onPress={teste} />
-      <Button title="Notificações" onPress={abreNotificacoes} />
+      <Button title="Notificações 1" onPress={abreNotificacoes} />
+      <Button title="Notificações 2" onPress={abreNotificacoes2} />
+      <Button title="Notificações 3" onPress={abreNotificacoes3} />
     </View>
   );
 }

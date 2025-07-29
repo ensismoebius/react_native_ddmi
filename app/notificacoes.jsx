@@ -8,7 +8,7 @@ import * as Notifications from 'expo-notifications';
 async function notificationHandler() {
     return (
         {
-            shouldShowAlert: true,
+            shouldShowBanner: true,
             shouldPlaySound: true,
             shouldSetBadge: true,
         }

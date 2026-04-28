@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import { Text, View, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 import { cores, raio, sombra } from "../utilidades/estilos";
+import { useTranslation } from "../hooks/useTranslation";
 
 const secoes = [
   {
@@ -82,11 +83,15 @@ function Secao({ dados }) {
 }
 
 export default function Index() {
+  const { t } = useTranslation();
+  const appName = t ? t('app.name') : 'DDMI';
+  const subtitle = t ? t('app.subtitle') : 'Demonstrações React Native';
+  
   return (
     <View style={styles.tela}>
       <View style={styles.cabecalho}>
-        <Text style={styles.titulo}>DDMI</Text>
-        <Text style={styles.subtitulo}>Demonstrações React Native</Text>
+        <Text style={styles.titulo}>{appName}</Text>
+        <Text style={styles.subtitulo}>{subtitle}</Text>
       </View>
       <ScrollView style={styles.lista} showsVerticalScrollIndicator={false}>
         {secoes.map((s, i) => (

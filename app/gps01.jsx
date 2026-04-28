@@ -1,36 +1,35 @@
-// npm install expo-location
-// npm install expo-sensor
-// npm install victory
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import * as Location from 'expo-location';
+import { useTranslation } from '../hooks/useTranslation';
 
-export default function App()
-{
+export default function App() {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
+    const { t } = useTranslation();
 
-    useEffect(() =>
-    {
-        (async () =>
-        {
+    useEffect(() => {
+        (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted')
-            {
-                setErrorMsg('Permission to access location was denied');
+            if (status !== 'granted') {
+                setErrorMsg(t ? t('gps.permissionDenied') : 'Permission to access location was denied');
                 return;
             }
 
             let loc = await Location.getCurrentPositionAsync({});
             setLocation(loc);
         })();
-    }, []);
+    }, [t]);
 
-    let text = 'Waiting...';
-    if (errorMsg) text = errorMsg;
-    else if (location)
-    {
-        text = `Latitude: ${location.coords.latitude}\nLongitude: ${location.coords.longitude}`;
+    const waitingText = t ? t('gps.waiting') : 'Waiting...';
+    const errorText = errorMsg || '';
+    
+    let text = waitingText;
+    if (errorMsg) text = errorText;
+    else if (location) {
+        const lat = t ? t('map.latitude') : 'Latitude';
+        const lon = t ? t('map.longitude') : 'Longitude';
+        text = `${lat}: ${location.coords.latitude}\n${lon}: ${location.coords.longitude}`;
     }
 
     return (

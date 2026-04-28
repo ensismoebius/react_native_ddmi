@@ -1,229 +1,733 @@
-# DDMI — React Native / Expo demo app
+# DDMI — Aplicativo Demo React Native / Expo
 
-Collection of Expo/React Native screens demonstrating common mobile features.
+Coleção de telas demonstrando recursos comuns de desenvolvimento mobile com React Native e Expo.
 
-## Requirements
+---
+
+## 📋 Requisitos
 
 - Node.js 18+
-- Android device/emulator **or** iOS device/simulator
+-dispositivo Android/emulador **ou** dispositivo iOS/simulador
 
-## Running locally
+---
+
+## 🚀 Como Executar
 
 ```bash
+# Instalar dependências
 npm install
-npx expo start          # opens Expo dev menu
+
+# Iniciar servidor de desenvolvimento
+npx expo start          # abre menu Expo
 npx expo start --android
 npx expo start --ios
 ```
 
-## Building with EAS
+---
+
+## 🧪 Testes
 
 ```bash
+# Executar testes
+npm test
+
+# Executar testes em modo watch
+npm run test:watch
+```
+
+---
+
+## 📦 Build com EAS
+
+```bash
+# Instalar EAS CLI globalmente
 npm install -g eas-cli
+
+# Login no EAS
 eas login
-eas build:configure     # updates app.json and creates eas.json
+
+# Configurar build
+eas build:configure     # atualiza app.json e cria eas.json
+
+# Build para plataformas
 eas build --platform android
 eas build --platform ios
 ```
 
 ---
 
-## Screens
+## 📁 Estrutura do Projeto
+
+```
+ddmi/
+├── app/                    # Telas do Expo Router (Drawer navigation)
+│   ├── _layout.tsx         # Layout raiz com menuDrawer
+│   ├── index.jsx           # Tela inicial (Home)
+│   ├── gps01.jsx           # GPS único
+│   ├── gps02.jsx            # GPS contínuo
+│   ├── consultaCEP.jsx      # Consulta CEP
+│   ├── route.jsx           # Planejador de rotas
+│   ├── sensor_*.jsx       # Sensores (acelerômetro, giroscópio, etc)
+│   ├── notificacoes*.jsx   # Notificações
+│   └── mapa*.jsx          # Mapas (WebView)
+│
+├── components/             # Componentes UI reutilizáveis
+│   ├── Button.jsx          # Botão com variantes
+│   ├── Card.jsx           # Card com sombras
+│   ├── TextInput.jsx       # Campo de texto estilizado
+│   └── Loading.jsx        # Indicador de carregamento
+│
+├── hooks/                  # Custom hooks
+│   └── useTranslation.js  # Hook para traduções i18n
+│
+├── constants/              # Constantes da aplicação
+│   ├── navigation.js      # Configuração do menuDrawer
+│   └── theme.js          # Cores, espaçamentos, tipografia
+│
+├── i18n/                  # Internacionalização
+│   ├── index.js          # Configuração i18next
+│   └── locales/
+│       ├── en.json       # Traduções em inglês
+│       └── pt-BR.json    # Traduções em português
+│
+├── utils/                 # Utilitários
+│   └── mapTemplates.js   # Templates HTML para mapas
+│
+├── utilidades/            # Utilitários legados
+│   ├── estilos.js        # Estilos compartilhados
+│   └── coordenadas.js  # Funções de coordenadas
+│
+├── __tests__/             # Testes Jest
+│   ├── navigation.test.js
+│   ├── i18n.test.js
+│   ├── theme.test.js
+│   ├── Button.test.jsx
+│   ├── Card.test.jsx
+│   └── TextInput.test.jsx
+│
+└── package.json
+```
+
+---
+
+## 🧭 Sistema de Navegação
+
+O aplicativo usa **Drawer Navigation** (menu lateral) do expo-router.
+
+### Configuração
+
+Todas as opções do menu estão centralizadas em `constants/navigation.js`:
+
+```javascript
+export const DRAWER_SCREENS = [
+  { name: 'index', label: 'Home', title: 'DDMI', icon: 'home-outline' },
+  { name: 'route', label: 'Route Planner', title: 'Route Planner', icon: 'map-outline' },
+  // ... mais itens
+];
+```
+
+Para adicionar uma nova tela:
+1. Crie o arquivo em `app/nome-da-tela.jsx`
+2. Adicione o item em `constants/navigation.js`
+
+---
+
+## 🌎 Internacionalização (i18n)
+
+O app suporta inglês e português brasileiro.
+
+### Arquivos de Tradução
+
+- `i18n/locales/en.json` — Inglês
+- `i18n/locales/pt-BR.json` — Português
+
+### Como Usar
+
+```javascript
+import { useTranslation } from '../hooks/useTranslation';
+
+function MinhaTela() {
+  const { t } = useTranslation();
+  
+  return <Text>{t('chave.de.translacao')}</Text>;
+}
+```
+
+### Chaves de Tradução
+
+| Seção | Chaves |
+|-------|--------|
+| **app** | name, subtitle |
+| **nav** | home, routePlanner, currentLocation, etc. |
+| **home** | redeEDados, sensores, localizacao, notificacoes, outros |
+| **gps** | waiting, permissionDenied |
+| **cep** | enterCep, search, address, neighborhood, city, state |
+| **sensor** | accelerometer, gyroscope, magnetometer, axisX, axisY, axisZ |
+| **common** | loading, error, cancel, save, delete, edit, add, back, go |
+
+---
+
+## 🎨 Tema e Cores
+
+Todas as cores e estilos centralizados em `constants/theme.js`:
+
+```javascript
+export const colors = {
+  primary: '#007AFF',
+  success: '#10B981',
+  danger: '#EF4444',
+  // ...
+};
+
+export const radii = { sm: 8, md: 12, lg: 16 };
+export const spacing = { sm: 8, md: 12, lg: 16 };
+export const typography = { h1: {...}, body: {...} };
+```
+
+---
+
+## 📱 Telas Disponíveis
 
 ### Home (`app/index.jsx`)
 
-Entry point. Lists buttons that navigate to every other screen.
+Ponto de entrada. Lista botões que navegam para todas as outras telas.
 
 ---
 
-### Consultar CEP (`app/consultaCEP.jsx`)
+### GPS Estático (`app/gps01.jsx`)
 
-Looks up a Brazilian postal code (CEP) via the public [ViaCEP](https://viacep.com.br) API.
+Obtém a posição atual **uma única vez** ao abrir a tela.
 
-**How to use:**
-1. Type an 8-digit CEP (numbers only).
-2. Tap **Buscar CEP**.
-3. Address, neighborhood, city and state are displayed below.
-
----
-
-### Enviar dados (`app/postJson.jsx`)
-
-Sends a POST request with a JSON body to the public [JSONPlaceholder](https://jsonplaceholder.com) test API.
-
-**How to use:**
-1. Fill in *Título da mensagem* and *Mensagem*.
-2. Tap **Enviar**.
-3. The response `id` returned by the server is shown.
+**Como usar:**
+1. Abra a tela e aceitar a solicitação de permissão
+2. Latitude e longitude são exibidas
 
 ---
 
-### GET e POST com PHP (`app/postGetPhp.jsx`)
+### Localização Atual (`app/gps02.jsx`)
 
-Demonstrates GET and POST requests to a local PHP backend (`http://localhost/api.php`) protected by an API key header (`X-API-KEY`).
+Acompanha a posição do dispositivo continuamente, atualizando a cada segundo.
 
-**How to use:**
-- Tap **Carregar dados** — performs a GET and displays the JSON response.
-- Fill in *Nome* and *Email*, then tap **Enviar** — performs a POST and shows the response.
+**Como usar:**
+1. Abra a tela e aceite a permissão de localização
+2. Coordenadas atualizam em tempo real conforme você se move
 
-> The PHP server must be running locally. Update `API_URL` and `API_KEY` in the file to match your setup.
+---
+
+### Consulta CEP (`app/consultaCEP.jsx`)
+
+Busca endereço pelo CEP brasileiro via API pública [ViaCEP](https://viacep.com.br).
+
+**Como usar:**
+1. Digite um CEP de 8 dígitos (só números)
+2. Toque em **Buscar CEP**
+3. Endereço, bairro, cidade e estado são exibidos
+
+---
+
+### Planejador de Rotas (`app/route.jsx`)
+
+Planejamento de rotas inteligentes com busca de endereço e direções turn-by-turn usando OSRM.
+
+**Recursos:**
+- Busca de endereço via Nominatim API
+- Cálculo de rota via OSRM
+- Linha azul da rota desenhada no mapa
+
+**Como usar:**
+1. Digite um endereço de destino
+2. Toque em **Traçar Rota**
+3. O mapa mostra a rota até o destino
 
 ---
 
 ### Acelerômetro (`app/sensor_accell.jsx`)
 
-Reads the device accelerometer at 10 Hz and displays live x/y/z values.
-
-**How to use:**
-- Values update automatically on mount.
-- Tap **Parar** to stop the listener; tap **Iniciar** to resume.
+Lê o acelerômetro do dispositivo a 10 Hz e exibe valores x/y/z em tempo real.
 
 ---
 
-### Movimento (`app/sensor_motion.jsx`)
+### Sensores de Movimento (`app/sensor_motion.jsx`)
 
-Reads the gyroscope at 20 Hz and plots live x/y/z data as scrolling line charts (Victory Native).
-
-**How to use:**
-- Open the screen — data collection starts immediately.
-- Scroll down to see the separate X, Y, Z charts.
+Lê o giroscópio a 20 Hz e plota dados x/y/z como gráficos de linha (Victory Native).
 
 ---
 
 ### Giroscópio (`app/sensor_gyroscope.jsx`)
 
-Same as *Movimento* but stores up to 100 data points per axis.
+Mesmo que *Sensor de Movimento* mas armazena até 100 pontos por eixo.
 
 ---
 
 ### Magnetômetro (`app/sensor_magnetometer.jsx`)
 
-Reads the magnetometer at 20 Hz and plots live x/y/z values as scrolling line charts. Domain is −100 to 100 µT.
+Lê o magnetômetro a 20 Hz e exibe valores x/y/z. Domínio: −100 a 100 µT.
 
 ---
 
-### GPS1 (`app/gps01.jsx`)
+### Mapa Básico (`app/mapa01.jsx`)
 
-Gets the device's current position **once** on mount.
+Mostra WebView com OpenStreetMap centralizado na posição atual (busca única).
 
-**How to use:**
-- Open the screen and accept the location permission prompt.
-- Latitude and longitude are displayed.
-
----
-
-### GPS2 (`app/gps02.jsx`)
-
-Watches the device position continuously, updating every second or every 1 meter.
-
-**How to use:**
-- Open the screen and accept the location permission prompt.
-- Coordinates update in real time as you move.
+**Como usar:**
+1. Aceite a permissão de localização
+2. O mapa carrega e centraliza na sua posição
 
 ---
 
-### Mapa1 (`app/mapa01.jsx`)
+### Mapa ao Vivo (`app/mapa02.jsx`)
 
-Shows a WebView with OpenStreetMap centered on the device's current location (one-shot fetch).
-
-**How to use:**
-- Accept the location permission prompt.
-- The map loads and pans to your position.
+Mesmo que *Mapa Básico* mas o mapa recentraliza conforme o dispositivo se move.
 
 ---
 
-### Mapa2 (`app/mapa02.jsx`)
+### Mapa Manual (`app/mapa03.jsx`)
 
-Same as *Mapa1* but the map re-centers continuously as the device moves.
+Entrada manual de coordenadas com suporte a marcadores OSM.
 
----
-
-### Mapa3 (`app/mapa03.jsx`)
-
-Manual coordinate input with OSM marker support.
-
-**How to use:**
-1. Type a *Latitude* and *Longitude*.
-2. Tap **Go**.
-3. The map pans to those coordinates and drops a marker.
+**Como usar:**
+1. Digite *Latitude* e *Longitude*
+2. Toque em **Ir**
+3. O mapa pan para essas coordenadas e adiciona um marcador
 
 ---
 
 ### Notificações 1 (`app/notificacoes.jsx`)
 
-Basic local push notifications using `expo-notifications`.
+Notificações push locais básicas usando `expo-notifications`.
 
-**How to use:**
-- Tap **Schedule Notification** — a notification titled *"Hello from Expo!"* fires after 2 seconds.
-- Received notifications are shown on screen.
+**Como usar:**
+1. Toque em **Agendar Notificação** — uma notificação "Olá do Expo!" é disparada após 2 segundos
+2. Notificações recebidas são mostradas na tela
 
 ---
 
 ### Notificações 2 (`app/notificacoes2.jsx`)
 
-Same as *Notificações 1* but with trigger `seconds: 0` (fires immediately).
+Mesmo que *Notificações 1* mas com `trigger: { seconds: 0 }` (dispara imediatamente).
 
 ---
 
 ### Notificações 3 (`app/notificacoes3.jsx`)
 
-Same as *Notificações 2* but plays a custom sound (`assets/sounds/oloco.mp3`).
+Mesmo que *Notificações 2* mas toca um som customizado (`assets/sounds/oloco.mp3`).
 
 ---
 
-### Usuários Express (`app/expressUsers.jsx`)
+### Enviar JSON (`app/postJson.jsx`)
 
-Full CRUD interface against a local Express + MySQL REST API.
+Envia request POST com corpo JSON para API pública de teste [JSONPlaceholder](https://jsonplaceholder.com).
 
-**Requires:** the Express server running on `http://localhost:5173/`.
+**Como usar:**
+1. Preencha *Título da mensagem* e *Mensagem*
+2. Toque em **Enviar**
+3. O `id` retornado pelo servidor é mostrado
+
+---
+
+### Teste de Backend (`app/postGetPhp.jsx`)
+
+Demonstra requests GET e POST para backend PHP local (`http://localhost/api.php`) protegido por header de API key (`X-API-KEY`).
+
+**Como usar:**
+1. Toque em **Carregar dados** — executa GET e exibe JSON
+2. Preencha *Nome* e *Email*, depois toque em **Enviar** — executa POST e mostra resposta
+
+> O servidor PHP deve estar rodando localmente. Atualize `API_URL` e `API_KEY` no arquivo conforme sua configuração.
+
+---
+
+### Gerenciar Usuários (`app/expressUsers.jsx`)
+
+Interface CRUD completa contra API REST Express + MySQL local.
+
+**Requires:** servidor Express rodando em `http://localhost:5173/`.
 
 ```bash
-# in the server directory
+# no diretório do servidor
 node server/index.js
 ```
 
-The server exposes:
+O servidor expõe:
 
-| Method | Endpoint       | Description    |
-|--------|----------------|----------------|
-| GET    | /api/users     | List all users |
-| POST   | /api/users     | Create a user  |
-| PUT    | /api/users/:id | Update a user  |
-| DELETE | /api/users/:id | Delete a user  |
+| Método | Endpoint       | Descrição     |
+|--------|----------------|---------------|
+| GET    | /api/users     | Listar usuários |
+| POST   | /api/users     | Criar usuário |
+| PUT    | /api/users/:id | Atualizar usuário |
+| DELETE | /api/users/:id | Deletar usuário |
 
-**How to use:**
-- Open the screen — users are fetched automatically.
-- **Add:** fill in *Nome* and *E-mail*, tap **Adicionar**.
-- **Edit:** tap **Editar** on a row, change the fields, tap **Salvar alteração**. Tap **Cancelar** to abort.
-- **Delete:** tap **Excluir** on a row.
-- Tap **Recarregar** to manually refresh the list.
+**Como usar:**
+1. Abra a tela — usuários são buscados automaticamente
+2. **Adicionar:** preencha *Nome* e *E-mail*, toque **Adicionar**
+3. **Editar:** toque **Editar** em uma linha, altere campos, toque **Salvar**. Toque **Cancelar** para abortar
+4. **Deletar:** toque **Excluir** em uma linha
+5. Toque **Recarregar** para atualizar manualmente a lista
 
-> On a physical Android device `localhost` refers to the device itself, not your machine.
-> Replace `localhost` in `API_BASE` inside `app/expressUsers.jsx` with your machine's LAN IP (e.g. `192.168.1.x`).
+> Em dispositivo Android físico, `localhost` se refere ao dispositivo, não ao seu computador.
+> Substitua `localhost` em `API_BASE` dentro de `app/expressUsers.jsx` pelo IP da sua rede (ex: `192.168.1.x`).
 
 ---
 
-## 🚀 From Zero to Hero: The App's Evolution Guide
+## 🧪 Testando
 
-Ever wondered how this app went from a simple set of examples to a polished product? Here is a friendly guide on the steps we took!
+O projeto usa Jest com `jest-expo` para testes.
 
-### 📍 Step 1: Getting the Basics Right (GPS)
-We started with the most essential part: **Location**. We used `expo-location` to create screens that could ask for permission and find out where the phone is. First, we did a "one-time" fetch, and then we upgraded to "real-time tracking" so the app knows when you move!
+```bash
+# Executar todos os testes
+npm test
 
-### 🗺️ Step 2: Adding a Real Map (OpenStreetMap)
-Seeing numbers (Latitude/Longitude) is boring, so we wanted a map. Instead of using expensive or restrictive options, we chose **OpenStreetMap**. 
-- **How we did it**: We used a `WebView` to load **Leaflet.js**. This let us put a beautiful, interactive map right inside the app without needing complex native configurations.
+# Executar em modo watch
+npm run test:watch
+```
 
-### 🛣️ Step 3: Making it Useful (Smart Routing)
-A map is great, but a map that helps you get somewhere is better! We created the **Route Planner**:
-- **Finding the Place**: We used the **Nominatim API** to turn a typed address (like "Main St, New York") into map coordinates.
-- **Finding the Path**: We used **OSRM** to calculate the best driving path between the user and the destination.
-- **Drawing the Line**: We drew a blue line on the map to show exactly where to go.
+### Cobertura de Testes
 
-### ✨ Step 4: The "Wow" Factor (UX & Design)
-Finally, we stopped thinking like developers and started thinking like users.
-- **The Hamburger Menu**: Navigating through buttons on a home screen is slow. We added a **Drawer Navigation** (that sleek side menu) so you can jump anywhere in one tap.
-- **Better Looks**: We added a professional blue theme, cool icons from `Ionicons`, and a branded header to make the app feel like a real product.
-- **Friendly Names**: We changed technical names (like `gps02`) to things anyone can understand, like `Current Location`.
+| Módulo | Testes |
+|--------|--------|
+| Navigation | 3 testes |
+| i18n | 5 testes |
+| Theme | 5 testes |
+| Button | 3 testes |
+| Card | 3 testes |
+| TextInput | 3 testes |
+| **Total** | **22 testes** |
 
-And that's it! From a few lines of GPS code to a fully featured, beautifully designed app. 🚀
+---
+
+## 🚀 Dozero ao App Completo: Guia Passo a Passo
+
+Este guia mostra como criar o app DDMI do zero, uma funcionalidade por vez.
+
+### Passo 1: Criar o Projeto
+
+Comece com um projeto Expo limpo:
+
+```bash
+npx create-expo-app@latest ddmi --template blank
+cd ddmi
+npm install
+```
+
+Execute para verificar:
+```bash
+npx expo start
+```
+
+---
+
+### Passo 2: Configurar NavegaçãoDrawer
+
+O app usaDrawer do expo-router para menu lateral.
+
+1. Instale os pacotes necessários:
+```bash
+npx expo install react-native-gesture-handler react-native-safe-area-context @expo/vector-icons
+```
+
+2. Crie `constants/navigation.js`:
+```javascript
+import { Ionicons } from '@expo/vector-icons';
+
+export const DRAWER_SCREENS = [
+  { name: 'index', label: 'Home', title: 'DDMI', icon: 'home-outline' },
+  { name: 'route', label: 'Route Planner', title: 'Route Planner', icon: 'map-outline' },
+];
+```
+
+3. Crie `components/CustomDrawerContent.jsx`:
+```javascript
+import { View, Text, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+
+export default function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+      <View style={styles.header}>
+        <Ionicons name="rocket" size={40} color="#fff" />
+        <Text style={styles.headerText}>DDMI App</Text>
+      </View>
+      <DrawerItemList {...props} />
+    </DrawerContentScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: '#007AFF',
+    padding: 20,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  headerText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+});
+```
+
+4. Atualize `app/_layout.tsx`:
+```javascript
+import { Drawer } from "expo-router/drawer";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Ionicons } from '@expo/vector-icons';
+import CustomDrawerContent from '../components/CustomDrawerContent';
+import { DRAWER_SCREENS } from '../constants/navigation';
+
+export default function RootLayout() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <Drawer
+          drawerContent={(props) => <CustomDrawerContent {...props} />}
+          screenOptions={{
+            headerStyle: { backgroundColor: '#007AFF' },
+            headerTintColor: '#fff',
+          }}
+        >
+          {DRAWER_SCREENS.map((screen) => (
+            <Drawer.Screen 
+              key={screen.name}
+              name={screen.name} 
+              options={{ 
+                drawerLabel: screen.label, 
+                title: screen.title,
+                drawerIcon: ({ color }) => <Ionicons name={screen.icon} size={22} color={color} />
+              }} 
+            />
+          ))}
+        </Drawer>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
+  );
+}
+```
+
+5. Crie `app/index.jsx`:
+```javascript
+import { useRouter } from "expo-router";
+import { Text, View, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+
+export default function Index() {
+  const router = useRouter();
+  
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>DDMI</Text>
+      <ScrollView>
+        <TouchableOpacity onPress={() => router.push('route')}>
+          <Text>Route Planner</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20 },
+  title: { fontSize: 32, fontWeight: 'bold' },
+});
+```
+
+---
+
+### Passo 3: Adicionar GPS Localização
+
+1. Instale expo-location:
+```bash
+npx expo install expo-location
+```
+
+2. Crie `app/gps01.jsx` (localização única):
+```javascript
+import { useEffect, useState } from 'react';
+import { Text, View, Button } from 'react-native';
+import * as Location from 'expo-location';
+
+export default function Gps01() {
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission denied');
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      {errorMsg ? <Text>{errorMsg}</Text> : 
+       location ? <Text>Lat: {location.coords.latitude}, Lon: {location.coords.longitude}</Text> :
+       <Text>Loading...</Text>}
+    </View>
+  );
+}
+```
+
+3. Crie `app/gps02.jsx` (rastreamento contínuo):
+```javascript
+import { useEffect, useState } from 'react';
+import { Text, View, Button } from 'react-native';
+import * as Location from 'expo-location';
+
+export default function Gps02() {
+  const [location, setLocation] = useState(null);
+  const [watching, setWatching] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (watching) Location.stopGeoforwardAsync();
+    };
+  }, [watching]);
+
+  const toggleWatching = async () => {
+    if (watching) {
+      await Location.stopGeoforwardAsync();
+      setWatching(false);
+    } else {
+      setWatching(true);
+      Location.watchPositionAsync(
+        { accuracy: Location.Accuracy.Balanced, timeInterval: 1000, distanceMeter: 1 },
+        (loc) => setLocation(loc)
+      );
+    }
+  };
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Button title={watching ? "Stop" : "Start"} onPress={toggleWatching} />
+      {location && (
+        <Text>Lat: {location.coords.latitude}{"\n"}Lon: {location.coords.longitude}</Text>
+      )}
+    </View>
+  );
+}
+```
+
+---
+
+### Passo 4: Adicionar Mapas (OpenStreetMap WebView)
+
+1. Instale WebView:
+```bash
+npx expo install react-native-webview
+```
+
+2. Crie `app/mapa01.jsx`:
+```javascript
+import { useState, useEffect } from 'react';
+import { WebView } from 'react-native-webview';
+import * as Location from 'expo-location';
+import { View, ActivityIndicator } from 'react-native';
+
+export default function Mapa01() {
+  const [location, setLocation] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      let loc = await Location.getCurrentPositionAsync({});
+      setLocation(loc.coords);
+      setLoading(false);
+    })();
+  }, []);
+
+  if (loading) return <ActivityIndicator size="large" />;
+
+  const mapHtml = `
+    <!DOCTYPE html>
+    <html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>body{margin:0;height:100vh}#map{height:100%}</style></head>
+    <body><div id="map"></div>
+    <script>
+      var map = L.map('map').setView([${location.latitude}, ${location.longitude}], 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+      }).addTo(map);
+      L.marker([${location.latitude}, ${location.longitude}]).addTo(map);
+    </script></body></html>
+  `;
+
+  return <WebView style={{ flex: 1 }} source={{ html: mapHtml }} />;
+}
+```
+
+---
+
+### Passo 5: Adicionar Planejamento de Rotas
+
+Crie `app/route.jsx` com busca de endereço (Nominatim API) e cálculo de rota (OSRM).
+
+---
+
+### Passo 6: Adicionar Sensores
+
+1. Instale sensores:
+```bash
+npx expo install expo-sensors
+```
+
+2. Crie telas para cada sensor (acelerômetro, giroscópio, magnetômetro).
+
+---
+
+### Passo 7: Adicionar Requisições HTTP
+
+1. Sem pacotes adicionais — use fetch nativo do JavaScript.
+
+2. Crie `app/consultaCEP.jsx` para buscar CEPs via ViaCEP API.
+
+---
+
+### Passo 8: Adicionar Notificações
+
+1. Instale notificações:
+```bash
+npx expo install expo-notifications
+```
+
+2. Crie telas de notificação com diferentes configurações de triggers e sons.
+
+---
+
+### Passo 9: Adicionar Gráficos (Victory Native)
+
+Instale para visualização de dados:
+```bash
+npm install victory-native react-native-svg
+```
+
+---
+
+### Passo 10: Adicionar CRUD com Backend Express
+
+Para a tela de gerenciamento de usuários, você precisará de:
+1. Servidor Express com MySQL (veja repositório separado)
+2. A tela faz requests GET/POST/PUT/DELETE para `/api/users`
+
+---
+
+## 📊 Resumo
+
+| Recurso | Pacote | Arquivos |
+|---------|-------|----------|
+| Navegação | expo-router | `_layout.tsx`, `navigation.js` |
+| GPS | expo-location | `gps01.jsx`, `gps02.jsx` |
+| Mapas | react-native-webview | `mapa01.jsx`, `mapa02.jsx`, `mapa03.jsx` |
+| Sensores | expo-sensors | `sensor_*.jsx` |
+| HTTP | fetch nativo | `consultaCEP.jsx`, `postJson.jsx` |
+| Notificações | expo-notifications | `notificacoes*.jsx` |
+| Gráficos | victory-native | `teste.jsx` |
+

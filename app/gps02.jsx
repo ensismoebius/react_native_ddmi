@@ -1,28 +1,21 @@
-// Import React and hooks for state and lifecycle management
 import React, { useEffect, useState } from 'react';
-// Import essential UI components from React Native
 import { StyleSheet, View, Text, Dimensions } from 'react-native';
-// Import the expo-location library to access the device's GPS
 import * as Location from 'expo-location';
-// Import WebView to render an HTML-based map (OpenStreetMap)
 import { WebView } from 'react-native-webview';
-// Import the map template utility to keep the component clean
 import { getLocationMapHtml } from '../utils/mapTemplates';
+import { useTranslation } from '../hooks/useTranslation';
 
-// The main component for the Current Location screen
 export default function App() {
-    // State to store the current coordinates of the device
     const [location, setLocation] = useState(null);
-    // State to store any error messages (e.g., if permissions are denied)
     const [errorMsg, setErrorMsg] = useState(null);
+    const { t } = useTranslation();
 
-    // UseEffect runs once when the screen loads to setup location tracking
     useEffect(() => {
         let subscription;
         (async () => {
             const { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
-                setErrorMsg('Permissão negada');
+                setErrorMsg(t ? t('gps.permissionDenied') : 'Permissão negada');
                 return;
             }
             subscription = await Location.watchPositionAsync(
@@ -37,7 +30,9 @@ export default function App() {
         return () => {
             if (subscription) subscription.remove();
         };
-    }, []);
+    }, [t]);
+
+    const waitingText = t ? t('gps.waiting') : 'Aguardando localização...';
 
     return (
         <View style={styles.container}>
@@ -55,7 +50,7 @@ export default function App() {
                 />
             ) : (
                 <View style={styles.centered}>
-                    <Text>Aguardando localização...</Text>
+                    <Text>{waitingText}</Text>
                 </View>
             )}
         </View>
@@ -76,4 +71,3 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     }
 });
-

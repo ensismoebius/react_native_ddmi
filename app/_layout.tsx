@@ -3,6 +3,7 @@ import { Drawer } from "expo-router/drawer";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
+import '../i18n/index';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import { DRAWER_SCREENS } from '../constants/navigation';
 
@@ -38,5 +39,3 @@ export default function RootLayout() {
     </GestureHandlerRootView>
   );
 }
-
-

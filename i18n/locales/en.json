@@ -1,0 +1,125 @@
+{
+  "app": {
+    "name": "DDMI",
+    "subtitle": "React Native Demos"
+  },
+  "nav": {
+    "home": "Home",
+    "routePlanner": "Route Planner",
+    "currentLocation": "Current Location",
+    "staticGps": "Static GPS",
+    "basicMap": "Basic Map",
+    "liveMap": "Live Map",
+    "manualMap": "Manual Map",
+    "addressFinder": "Address Finder",
+    "userManagement": "User Management",
+    "sendJson": "Send JSON",
+    "backendTest": "Backend Test",
+    "accelerometer": "Accelerometer",
+    "motionSensor": "Motion Sensor",
+    "gyroscope": "Gyroscope",
+    "magnetometer": "Magnetometer",
+    "notifications1": "Notifications 1",
+    "notifications2": "Notifications 2",
+    "notifications3": "Notifications 3",
+    "testLab": "Test Lab"
+  },
+  "home": {
+    "redeEDados": "Network & Data",
+    "sensores": "Sensors",
+    "localizacao": "Location",
+    "notificacoes": "Notifications",
+    "outros": "Other",
+    "cep": "CEP",
+    "postJson": "POST JSON",
+    "php": "PHP",
+    "express": "Express",
+    "acelerometro": "Accelerometer",
+    "movimento": "Motion",
+    "giroscopio": "Gyroscope",
+    "magnetometro": "Magnetometer",
+    "gps1": "GPS 1",
+    "gps2": "GPS 2",
+    "mapa1": "Mapa 1",
+    "mapa2": "Mapa 2",
+    "mapa3": "Mapa 3",
+    "notif1": "Notif 1",
+    "notif2": "Notif 2",
+    "notif3": "Notif 3",
+    "teste": "Test"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "back": "Back",
+    "go": "Go"
+  },
+  "gps": {
+    "waiting": "Waiting for location...",
+    "permissionDenied": "Location permission denied"
+  },
+  "cep": {
+    "enterCep": "Enter CEP:",
+    "search": "Search CEP",
+    "address": "Address",
+    "neighborhood": "Neighborhood",
+    "city": "City",
+    "state": "State"
+  },
+  "route": {
+    "destination": "Destination:",
+    "placeholder": "e.g. Av. Paulista, São Paulo",
+    "traceRoute": "Trace Route",
+    "goBack": "Back",
+    "notFound": "Address not found",
+    "error": "Could not calculate route"
+  },
+  "sensor": {
+    "accelerometer": "Accelerometer",
+    "gyroscope": "Gyroscope",
+    "magnetometer": "Magnetometer",
+    "axisX": "X Axis",
+    "axisY": "Y Axis",
+    "axisZ": "Z Axis"
+  },
+  "json": {
+    "enterData": "Enter data to send:",
+    "title": "Title",
+    "message": "Message",
+    "send": "Send",
+    "serverResponse": "Server response:"
+  },
+  "backend": {
+    "loadPhp": "Load data from PHP (GET)",
+    "sendPhp": "Send data to PHP (POST)",
+    "name": "Name",
+    "email": "E-mail",
+    "send": "Send",
+    "response": "Server response:"
+  },
+  "users": {
+    "title": "Users — Express API",
+    "namePlaceholder": "Name",
+    "emailPlaceholder": "E-mail",
+    "addUser": "Add User",
+    "editUser": "Edit User",
+    "reload": "Reload"
+  },
+  "notifications": {
+    "title": "Title:",
+    "body": "Body:",
+    "none": "None",
+    "schedule": "Schedule Notification (2s)",
+    "fireNow": "Fire Now",
+    "fireWithSound": "Fire with Custom Sound"
+  },
+  "map": {
+    "latitude": "Latitude",
+    "longitude": "Longitude"
+  }
+}

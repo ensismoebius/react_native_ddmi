@@ -173,6 +173,15 @@ export default function RootLayout() {
 <Drawer drawerContent={(props) => <MeuMenuCustomizado {...props} />} />
 ```
 
+**⚠️ Bug Crítico de Toque (Android):**
+Em listas longas de menu no Android, os itens inferiores podem parar de responder ou exigir múltiplos cliques.
+**Soluções aplicadas no DDMI:**
+1. Substituir `DrawerContentScrollView` por `ScrollView` nativo do `react-native`.
+2. Usar `flexGrow: 1` no `contentContainerStyle` do ScrollView.
+3. Adicionar um `View` de espaçamento (`bottomSpacer`) ao final da lista.
+4. Definir `pointerEvents="none"` em ícones decorativos para evitar roubo de eventos.
+5. Desabilitar a Nova Arquitetura no `app.json` (`"newArchEnabled": false`).
+
 ---
 
 #### 📦 `@react-navigation/native` (~7.1.6)
@@ -1054,6 +1063,8 @@ unzip -l android/app/build/outputs/apk/debug/app-debug.apk | grep -E "bundle|ind
 3. **WebView não suporta geolocation por padrão** — configure `geolocationEnabled={true}`
 4. **expo-location pode retornar coordenadas inválidas dentro de lugares fechados** — use espaços abertos para testar
 5. **CORS pode bloquear requisições externas** — configure servidor para aceitar seu domínio ou use JSONP
+6. **Instabilidade de toque no Drawer (Android)** — Itens inferiores podem parar de responder. Solução: usar `ScrollView` nativo, `flexGrow: 1` e desabilitar `newArchEnabled` no `app.json`.
+
 
 ---
 

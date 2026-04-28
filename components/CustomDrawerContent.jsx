@@ -1,25 +1,24 @@
 /**
  * Componente CustomDrawerContent - Conteúdo personalizado do menu lateral
  * 
- * Define o visual do menu drawer (navegação lateral):
- * - Cabeçalho com logo e nome do app
- * - Lista de links de navegação (gerada automaticamente)
+ * Resolve problemas de toque no Android (itens inferiores não respondendo)
+ * utilizando uma estrutura de View + ScrollView robusta.
  * 
- * Este componente substitui o conteúdo padrão do drawer do React Navigation
- * para adicionar identidade visual ao app.
- * 
- * Uso: Configurado em app/_layout.jsx no Drawer.Navigator
+ * @module components/CustomDrawerContent
  */
 
 // ============================================
 // IMPORTS
+// Bibliotecas e componentes necessários
 // ============================================
 
 import React from 'react';
 import { 
-  View,   // Container
-  Text,   // Texto
-  StyleSheet // Estilos
+  View,             // Container básico
+  Text,             // Componente de texto
+  StyleSheet,       // Estilos CSS-in-JS
+  ScrollView,       // Scroll vertical nativo
+  TouchableOpacity  // Botão com feedback visual (não usado aqui, mas importado)
 } from 'react-native';
 
 // Ícones do Ionicons (pacote de ícones do Expo)
@@ -27,11 +26,10 @@ import { Ionicons } from '@expo/vector-icons';
 
 // Componentes do React Navigation Drawer
 import { 
-  DrawerContentScrollView, // ScrollView do drawer (permite scroll se necessário)
   DrawerItemList           // Lista padrão de itens de navegação
 } from '@react-navigation/drawer';
 
-// Cores do tema
+// Cores do tema centralizado
 import { colors } from '../constants/theme';
 
 // ============================================
@@ -39,72 +37,111 @@ import { colors } from '../constants/theme';
 // ============================================
 
 /**
- * Componente CustomDrawerContent
- * @param {Object} props - Propriedades do React Navigation (contém state, descriptors, etc)
+ * CustomDrawerContent - Renderiza o menu lateral personalizado
+ * @param {Object} props - Propriedades do React Navigation (state, descriptors, navigation)
  * @returns {JSX.Element} UI do menu drawer
  */
 export default function CustomDrawerContent(props) {
+  // Desestruturação de propriedades para acesso fácil
+  const { state, descriptors, navigation } = props;
+
   return (
     /**
-     * DrawerContentScrollView: ScrollView especial do drawer
-     * Permite que a lista de itens role se não couber na tela
-     * {...props} passa todas as propriedades do Navigation Drawer
+     * View Root com flex: 1
+     * Garante que o container ocupe toda a altura do Drawer,
+     * evitando que itens no fundo fiquem fora da área de toque.
      */
-    <DrawerContentScrollView {...props}>
+    <View style={styles.root}>
       
       {/* ========================================
-          CABEÇALHO DO MENU
-          Contiene logo e nome do app
+          CABEÇALHO FIXO
+          Contém o logo e o nome do aplicativo
           ======================================== */}
       <View style={styles.header}>
-        {/* Ícone do app (foguete) */}
+        {/* Ícone decorativo (Foguete) */}
         <Ionicons 
-          name="rocket"    // Nome do ícone
-          size={40}        // Tamanho 40px
-          color="#fff"     // Cor branca
+          name="rocket" 
+          size={40} 
+          color="#fff" 
+          pointerEvents="none" // Crucial: evita que o ícone roube eventos de toque do menu
         />
-        {/* Nome do app */}
+        {/* Nome do App */}
         <Text style={styles.headerText}>DDMI App</Text>
       </View>
 
       {/* ========================================
-          ITENS DE NAVEGAÇÃO
-          Lista automática das telas (DrawerItemList)
+          SISTEMA DE SCROLL
+          ScrollView nativo para evitar bugs de toque no Android
           ======================================== */}
-      {/*
-         DrawerItemList: Renderiza automaticamente todos os itens
-         de navegação baseados na configuração de rotas.
-         {...props} fornece o contexto de navegação necessário.
-      */}
-      <DrawerItemList {...props} />
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false} // Oculta barra de rolagem lateral
+      >
+        {/* 
+          Container para a lista de itens
+          Envolvemos o DrawerItemList para garantir que o layout não colapse
+        */}
+        <View style={styles.listContainer}>
+          {/* Renderiza automaticamente os itens definidos no Navigator */}
+          <DrawerItemList {...props} />
+        </View>
+        
+        {/* 
+          Espaçador de Fundo (Bottom Spacer)
+          Garante que o último item seja clicável mesmo em aparelhos 
+          com navegação por gestos do Android (barra inferior).
+        */}
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
       
-    </DrawerContentScrollView>
+    </View>
   );
 }
 
 // ============================================
-// ESTILOS
+// ESTILOS (StyleSheet)
 // ============================================
 
 const styles = StyleSheet.create({
-  /**
-   * Estilo do cabeçalho do menu
-   * Fundo azul, centralizado, com espaçamento
-   */
-  header: {
-    backgroundColor: colors.primary, // Azul principal do tema
-    padding: 20,                     // Espaçamento interno
-    alignItems: 'center',            // Centraliza horizontalmente
-    marginBottom: 10,                // Espaço abaixo do cabeçalho
+  // Container principal que preenche todo o Drawer
+  root: {
+    flex: 1,
+    backgroundColor: colors.surface, // Cor de fundo do tema
   },
-  /**
-   * Estilo do texto do nome do app
-   * Branco, maior e em negrito
-   */
+  // Estilo do cabeçalho (azul)
+  header: {
+    backgroundColor: colors.primary,
+    padding: 20,
+    paddingTop: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 5,
+  },
+  // Estilo do texto no cabeçalho
   headerText: {
-    color: '#fff',      // Branco
-    fontSize: 20,       // Tamanho maior
-    fontWeight: 'bold', // Negrito
-    marginTop: 10,      // Espaço entre ícone e texto
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  // Estilo do ScrollView
+  scrollView: {
+    flex: 1,
+  },
+  // Estilo do conteúdo interno do ScrollView
+  scrollContent: {
+    flexGrow: 1, // Expande conteúdo para preencher a tela
+    paddingBottom: 20,
+  },
+  // Container da lista de links
+  listContainer: {
+    flex: 1,
+    width: '100%',
+  },
+  // Espaço extra no final para evitar conflitos de toque
+  bottomSpacer: {
+    height: 50, 
+    width: '100%',
   },
 });

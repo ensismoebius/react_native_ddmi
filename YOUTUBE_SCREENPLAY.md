@@ -179,7 +179,7 @@ Criando: components/TextInput.jsx
 Cada componente com props bem definidas!
 ```
 
-### 06:00 - 09:00 | TELA INICIAL
+### 06:00 - 09:00 | TELA INICIAL E FIXING BUGS
 ```
 [NARRADOR]
 Agora vamos criar a tela inicial do app.
@@ -195,7 +195,12 @@ Criando: app/index.jsx
   - Notificações
   - Outros
   
-Cada seção com botões que navegam para as功能 específicas.
+Cada seção com botões que navegam para as funcionalidade específicas.
+
+DICA DE OURO: Se você notar que os botões do menu lateral param de funcionar no Android, 
+não entre em pânico! Isso é um bug conhecido da Nova Arquitetura do React Native.
+A gente resolve isso usando um ScrollView nativo e desabilitando o 'newArchEnabled' no app.json.
+Tudo isso já está implementad no projeto!
 ```
 
 ### 09:00 - 11:00 | TESTANDO NO CELULAR

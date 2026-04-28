@@ -24,6 +24,9 @@
 
 import React, { createContext, useState, useContext } from 'react';
 
+// Importa instância do i18n para mudar idioma globalmente
+import i18n from '../i18n/index';
+
 // ============================================
 // DEFINIÇÃO DE TIPOS (JSDoc)
 // ============================================
@@ -82,12 +85,17 @@ export function AppProvider({ children }) {
   // ------------------------------------------
   
   /**
-   * setLocale: Altera o idioma do app
+   * setLocale: Altera o idioma do app e sincroniza com i18next
    * 
    * @param {Locale} newLocale - Novo idioma (en, pt-BR, eo)
    */
   const setLocale = (newLocale) => {
+    // 1. Atualiza estado local do context
     setLocaleState(newLocale);
+    
+    // 2. Sincroniza imediatamente com a instância do i18next
+    // Isso evita a necessidade de componentes "syncer" no layout
+    i18n.changeLanguage(newLocale);
   };
 
   /**

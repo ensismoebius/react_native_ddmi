@@ -1,12 +1,7 @@
-// npm install expo-location
-// npm install expo-sensor
-// npm install victory
-// npm install react-native-maps
-// npm install @expo/ngrok@^4.1.0
-
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
+import MapView, { Marker } from 'react-native-maps';
 
 export default function App()
 {
@@ -29,8 +24,8 @@ export default function App()
             subscription = await Location.watchPositionAsync(
                 {
                     accuracy: Location.Accuracy.High,
-                    timeInterval: 1000,      // atualiza a cada 1s
-                    distanceInterval: 1,     // ou a cada 1 metro
+                    timeInterval: 1000,
+                    distanceInterval: 1,
                 },
                 (loc) => setLocation(loc)
             );
@@ -38,21 +33,44 @@ export default function App()
 
         return () =>
         {
-            if (subscription) subscription.remove(); // limpa ao desmontar
+            if (subscription) subscription.remove();
         };
     }, []);
 
     return (
         <View style={styles.container}>
             {errorMsg ? (
-                <Text>{errorMsg}</Text>
+                <View style={styles.centered}>
+                    <Text>{errorMsg}</Text>
+                </View>
             ) : location ? (
-                <>
-                    <Text>Latitude: {location.coords.latitude}</Text>
-                    <Text>Longitude: {location.coords.longitude}</Text>
-                </>
+                <MapView 
+                    style={styles.map} 
+                    initialRegion={{
+                        latitude: location.coords.latitude,
+                        longitude: location.coords.longitude,
+                        latitudeDelta: 0.01,
+                        longitudeDelta: 0.01,
+                    }}
+                    region={{
+                        latitude: location.coords.latitude,
+                        longitude: location.coords.longitude,
+                        latitudeDelta: 0.01,
+                        longitudeDelta: 0.01,
+                    }}
+                >
+                    <Marker 
+                        coordinate={{ 
+                            latitude: location.coords.latitude, 
+                            longitude: location.coords.longitude 
+                        }} 
+                        title="Você está aqui" 
+                    />
+                </MapView>
             ) : (
-                <Text>Aguardando localização...</Text>
+                <View style={styles.centered}>
+                    <Text>Aguardando localização...</Text>
+                </View>
             )}
         </View>
     );
@@ -61,7 +79,14 @@ export default function App()
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    map: {
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+    },
+    centered: {
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    },
+    }
 });

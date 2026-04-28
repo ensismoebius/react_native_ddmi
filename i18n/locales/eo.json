@@ -1,0 +1,108 @@
+{
+  "app": {
+    "name": "DDMI",
+    "subtitle": "React Native Demos"
+  },
+  "nav": {
+    "home": "Hejmo",
+    "routePlanner": "Vojaĝplanilo",
+    "currentLocation": "Nuna Lokado",
+    "staticGps": "Statika GPS",
+    "basicMap": "Baza Mapo",
+    "liveMap": "Viva Mapo",
+    "manualMap": "Mana Mapo",
+    "addressFinder": "Adres-Serĉilo",
+    "userManagement": "Uzanto-Administrado",
+    "sendJson": "Sendi JSON",
+    "backendTest": "Backend-Testo",
+    "accelerometer": "Akcelometro",
+    "motionSensor": "Mov-Sensilo",
+    "gyroscope": "Giroskopio",
+    "magnetometer": "Magnetometro",
+    "notifications1": "Sciigoj 1",
+    "notifications2": "Sciigoj 2",
+    "notifications3": "Sciigoj 3",
+    "testLab": "Testejo"
+  },
+  "home": {
+    "redeEDados": "Reto kaj Datumoj",
+    "sensores": "Sensiloj",
+    "localizaco": "Lokado",
+    "notifikacoj": "Sciigoj",
+    "aliaj": "Aliaj"
+  },
+  "common": {
+    "loading": "Ŝarĝante...",
+    "error": "Eraro",
+    "cancel": "Nuligi",
+    "save": "Konservi",
+    "delete": "Forigi",
+    "edit": "Redakti",
+    "add": "Aldoni",
+    "back": "Reen",
+    "go": "Iri"
+  },
+  "gps": {
+    "waiting": "Atendanta lokadon...",
+    "permissionDenied": "Lokada permeso rifuzita"
+  },
+  "cep": {
+    "enterCep": "Enigu CEP:",
+    "search": "Serĉi CEP",
+    "address": "Adreso",
+    "neighborhood": "Kvartalo",
+    "city": "Urbego",
+    "state": "Provinco"
+  },
+  "route": {
+    "destination": "Celeco:",
+    "placeholder": "ekz. Av. Paulista, Sanpaŭlo",
+    "traceRoute": "Trazi Vojon",
+    "goBack": "Reen",
+    "notFound": "Adreso ne trovita",
+    "error": "Ne eblas kalkuli vojon"
+  },
+  "sensor": {
+    "accelerometer": "Akcelometro",
+    "gyroscope": "Giroskopio",
+    "magnetometer": "Magnetometro",
+    "axisX": "Akso X",
+    "axisY": "Akso Y",
+    "axisZ": "Akso Z"
+  },
+  "json": {
+    "enterData": "Enigu datumojn por sendi:",
+    "title": "Titolo",
+    "message": "Mesaĝo",
+    "send": "Sendi",
+    "serverResponse": "Servila respondo:"
+  },
+  "backend": {
+    "loadPhp": "Ŝarĝi datumojn el PHP (GET)",
+    "sendPhp": "Sendi datumojn al PHP (POST)",
+    "name": "Nomo",
+    "email": "Retpoŝto",
+    "send": "Sendi",
+    "response": "Servila respondo:"
+  },
+  "users": {
+    "title": "Uzantoj — EsprimAPI",
+    "namePlaceholder": "Nomo",
+    "emailPlaceholder": "Retpoŝto",
+    "addUser": "Aldoni Uzanton",
+    "editUser": "Redakti Uzanton",
+    "reload": "Reŝarĝi"
+  },
+  "notifications": {
+    "title": "Titolo:",
+    "body": "Korpo:",
+    "none": "Neniu",
+    "schedule": "Planumi Sciigon (2s)",
+    "fireNow": "Disparigi Nun",
+    "fireWithSound": "Disparigi kun Propra Sono"
+  },
+  "map": {
+    "latitude": "Latitudo",
+    "longitude": "Longitudo"
+  }
+}

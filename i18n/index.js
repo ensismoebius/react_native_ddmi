@@ -4,10 +4,11 @@ import * as Localization from 'expo-localization';
 
 import en from './locales/en.json';
 import ptBR from './locales/pt-BR.json';
+import eo from './locales/eo.json';
 
 const locales = Localization.getLocales();
 const deviceLanguage = locales[0]?.languageCode ?? 'en';
-const supportedLanguages = ['en', 'pt'];
+const supportedLanguages = ['en', 'pt', 'eo'];
 const defaultLanguage = supportedLanguages.includes(deviceLanguage) ? deviceLanguage : 'en';
 
 i18n
@@ -16,6 +17,7 @@ i18n
     resources: {
       en: { translation: en },
       'pt-BR': { translation: ptBR },
+      eo: { translation: eo },
     },
     lng: defaultLanguage,
     fallbackLng: 'en',

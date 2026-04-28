@@ -1,26 +1,30 @@
+// Import React and hooks for state and lifecycle management
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+// Import essential UI components from React Native
+import { StyleSheet, View, Text, Dimensions } from 'react-native';
+// Import the expo-location library to access the device's GPS
 import * as Location from 'expo-location';
-import MapView, { Marker } from 'react-native-maps';
+// Import WebView to render an HTML-based map (OpenStreetMap)
+import { WebView } from 'react-native-webview';
+// Import the map template utility to keep the component clean
+import { getLocationMapHtml } from '../utils/mapTemplates';
 
-export default function App()
-{
+// The main component for the Current Location screen
+export default function App() {
+    // State to store the current coordinates of the device
     const [location, setLocation] = useState(null);
+    // State to store any error messages (e.g., if permissions are denied)
     const [errorMsg, setErrorMsg] = useState(null);
 
-    useEffect(() =>
-    {
+    // UseEffect runs once when the screen loads to setup location tracking
+    useEffect(() => {
         let subscription;
-
-        (async () =>
-        {
+        (async () => {
             const { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted')
-            {
+            if (status !== 'granted') {
                 setErrorMsg('Permissão negada');
                 return;
             }
-
             subscription = await Location.watchPositionAsync(
                 {
                     accuracy: Location.Accuracy.High,
@@ -30,9 +34,7 @@ export default function App()
                 (loc) => setLocation(loc)
             );
         })();
-
-        return () =>
-        {
+        return () => {
             if (subscription) subscription.remove();
         };
     }, []);
@@ -44,29 +46,13 @@ export default function App()
                     <Text>{errorMsg}</Text>
                 </View>
             ) : location ? (
-                <MapView 
-                    style={styles.map} 
-                    initialRegion={{
-                        latitude: location.coords.latitude,
-                        longitude: location.coords.longitude,
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.01,
+                <WebView 
+                    style={styles.map}
+                    originWhitelist={['*']}
+                    source={{ 
+                        html: getLocationMapHtml(location.coords.latitude, location.coords.longitude) 
                     }}
-                    region={{
-                        latitude: location.coords.latitude,
-                        longitude: location.coords.longitude,
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.01,
-                    }}
-                >
-                    <Marker 
-                        coordinate={{ 
-                            latitude: location.coords.latitude, 
-                            longitude: location.coords.longitude 
-                        }} 
-                        title="Você está aqui" 
-                    />
-                </MapView>
+                />
             ) : (
                 <View style={styles.centered}>
                     <Text>Aguardando localização...</Text>
@@ -90,3 +76,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     }
 });
+

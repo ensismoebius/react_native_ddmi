@@ -49,7 +49,7 @@ Looks up a Brazilian postal code (CEP) via the public [ViaCEP](https://viacep.co
 
 ### Enviar dados (`app/postJson.jsx`)
 
-Sends a POST request with a JSON body to the public [JSONPlaceholder](https://jsonplaceholder.typicode.com) test API.
+Sends a POST request with a JSON body to the public [JSONPlaceholder](https://jsonplaceholder.com) test API.
 
 **How to use:**
 1. Fill in *Título da mensagem* and *Mensagem*.
@@ -200,3 +200,30 @@ The server exposes:
 
 > On a physical Android device `localhost` refers to the device itself, not your machine.
 > Replace `localhost` in `API_BASE` inside `app/expressUsers.jsx` with your machine's LAN IP (e.g. `192.168.1.x`).
+
+---
+
+## 🚀 From Zero to Hero: The App's Evolution Guide
+
+Ever wondered how this app went from a simple set of examples to a polished product? Here is a friendly guide on the steps we took!
+
+### 📍 Step 1: Getting the Basics Right (GPS)
+We started with the most essential part: **Location**. We used `expo-location` to create screens that could ask for permission and find out where the phone is. First, we did a "one-time" fetch, and then we upgraded to "real-time tracking" so the app knows when you move!
+
+### 🗺️ Step 2: Adding a Real Map (OpenStreetMap)
+Seeing numbers (Latitude/Longitude) is boring, so we wanted a map. Instead of using expensive or restrictive options, we chose **OpenStreetMap**. 
+- **How we did it**: We used a `WebView` to load **Leaflet.js**. This let us put a beautiful, interactive map right inside the app without needing complex native configurations.
+
+### 🛣️ Step 3: Making it Useful (Smart Routing)
+A map is great, but a map that helps you get somewhere is better! We created the **Route Planner**:
+- **Finding the Place**: We used the **Nominatim API** to turn a typed address (like "Main St, New York") into map coordinates.
+- **Finding the Path**: We used **OSRM** to calculate the best driving path between the user and the destination.
+- **Drawing the Line**: We drew a blue line on the map to show exactly where to go.
+
+### ✨ Step 4: The "Wow" Factor (UX & Design)
+Finally, we stopped thinking like developers and started thinking like users.
+- **The Hamburger Menu**: Navigating through buttons on a home screen is slow. We added a **Drawer Navigation** (that sleek side menu) so you can jump anywhere in one tap.
+- **Better Looks**: We added a professional blue theme, cool icons from `Ionicons`, and a branded header to make the app feel like a real product.
+- **Friendly Names**: We changed technical names (like `gps02`) to things anyone can understand, like `Current Location`.
+
+And that's it! From a few lines of GPS code to a fully featured, beautifully designed app. 🚀

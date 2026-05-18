@@ -112,12 +112,51 @@ const secoes = [
   },
 
   // ------------------------------------------
+  // SEÇÃO: ARMAZENAMENTO LOCAL
+  // Banco de dados e chave-valor persistente
+  // ------------------------------------------
+  {
+    titulo: "Armazenamento",
+    cor: "#8B5CF6",
+    itens: [
+      { label: "SQLite", rota: "/sqlite_demo" },        // CRUD SQLite local
+      { label: "AsyncStorage", rota: "/async_storage" }, // Chave-valor persistente
+    ],
+  },
+
+  // ------------------------------------------
+  // SEÇÃO: LISTAS
+  // Renderização de listas com FlatList
+  // ------------------------------------------
+  {
+    titulo: "Listas",
+    cor: "#0EA5E9",
+    itens: [
+      { label: "Tarefas", rota: "/lista_tarefas" }, // FlatList com dados/afazeres.js
+    ],
+  },
+
+  // ------------------------------------------
+  // SEÇÃO: MÍDIA
+  // Câmera, galeria e áudio
+  // ------------------------------------------
+  {
+    titulo: "Mídia",
+    cor: "#EC4899",
+    itens: [
+      { label: "Câmera", rota: "/camera" },         // Tirar foto / galeria
+      { label: "Áudio", rota: "/audio" },           // Player MP3
+      { label: "Háptico", rota: "/haptics" },       // Vibração/feedback tátil
+    ],
+  },
+
+  // ------------------------------------------
   // SEÇÃO: OUTROS
   // Funcionalidades diversas
   // ------------------------------------------
   {
     titulo: "Outros",
-    cor: cores.outros,          // Cor roxa
+    cor: cores.outros,
     itens: [
       { label: "Teste", rota: "/teste" },           // Tela de testes
     ],

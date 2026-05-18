@@ -795,6 +795,325 @@ const coordinates = route.overview_polyline.points;
 
 ---
 
+### Listas
+
+#### 📦 FlatList (React Native nativo)
+**Propósito:** Renderizar listas longas com performance otimizada (renderiza só os itens visíveis).
+
+**Diferença de `.map()`:**
+- `.map()` renderiza TODOS os itens de uma vez (lento para listas grandes)
+- `FlatList` renderiza apenas os visíveis na tela (virtualização)
+
+**Uso básico:**
+```javascript
+import { FlatList, Text, View } from 'react-native';
+
+const dados = [{ id: '1', nome: 'João' }, { id: '2', nome: 'Maria' }];
+
+function MinhaLista() {
+  return (
+    <FlatList
+      data={dados}
+      keyExtractor={item => item.id}       // Chave única por item (obrigatório)
+      renderItem={({ item }) => (
+        <Text>{item.nome}</Text>
+      )}
+      ItemSeparatorComponent={() => <View style={{ height: 8 }} />} // Separador
+      ListEmptyComponent={<Text>Lista vazia</Text>}  // Quando data=[]
+    />
+  );
+}
+```
+
+**Tela de exemplo:** [app/lista_tarefas.jsx](app/lista_tarefas.jsx)
+— usa dados de [dados/afazeres.js](dados/afazeres.js), demonstra toggle de itens
+
+---
+
+### Armazenamento
+
+#### 📦 `@react-native-async-storage/async-storage`
+**Propósito:** Armazenamento chave-valor persistente. Dados sobrevivem a reinicializações do app.
+
+**Diferença de SQLite:** AsyncStorage é para dados simples (string/JSON); SQLite é para dados relacionais com queries.
+
+**Instalação:**
+```bash
+npx expo install @react-native-async-storage/async-storage
+```
+
+**Uso básico:**
+```javascript
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Salvar (valor DEVE ser string — use JSON.stringify para objetos)
+await AsyncStorage.setItem('@chave', 'valor');
+await AsyncStorage.setItem('@usuario', JSON.stringify({ nome: 'João', token: 'abc' }));
+
+// Ler
+const valor = await AsyncStorage.getItem('@chave'); // null se não existir
+const usuario = JSON.parse(await AsyncStorage.getItem('@usuario'));
+
+// Apagar
+await AsyncStorage.removeItem('@chave');
+
+// Listar todas as chaves
+const chaves = await AsyncStorage.getAllKeys(); // ['@chave', '@usuario', ...]
+
+// Apagar tudo
+await AsyncStorage.clear();
+```
+
+**Quirks:**
+- Sempre assíncrono — use `await` ou `.then()`
+- Máximo ~6 MB no iOS; sem limite rígido no Android (mas evite armazenar demais)
+- Use prefixo nas chaves (`@nomeapp:chave`) para evitar colisão com outras libs
+- Não é criptografado — não guarde senhas em texto puro
+
+**Tela de exemplo:** [app/async_storage.jsx](app/async_storage.jsx)
+
+---
+
+### Banco de Dados Local
+
+#### 📦 `expo-sqlite` (~15.x)
+**Propósito:** Banco de dados SQLite local no dispositivo (sem servidor).
+
+**Instalação:**
+```bash
+npx expo install expo-sqlite
+```
+
+**Uso básico (CRUD):**
+```javascript
+import * as SQLite from "expo-sqlite";
+
+// 1. Abrir ou criar banco
+const db = SQLite.openDatabaseSync("meu_banco.db");
+
+// 2. Criar tabela
+db.execSync(
+  "CREATE TABLE IF NOT EXISTS pessoas (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT);"
+);
+
+// 3. Inserir dado
+await db.runAsync("INSERT INTO pessoas (nome) VALUES (?);", ["João"]);
+
+// 4. Consultar todos
+const rows = await db.getAllAsync("SELECT * FROM pessoas;");
+// rows = [{ id: 1, nome: 'João' }, ...]
+```
+
+**Exemplo completo com FlatList:**
+```javascript
+import * as SQLite from "expo-sqlite";
+import { useEffect, useState } from "react";
+import { Button, FlatList, Text, TextInput, View } from "react-native";
+
+export default function SqliteDemo() {
+    const db = SQLite.openDatabaseSync("demo.db");
+    const [name, setName] = useState("");
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        db.execSync(
+            "CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);"
+        );
+        fetchItems();
+    }, []);
+
+    function addItem() {
+        if (!name.trim()) return;
+        db.runAsync("INSERT INTO people (name) VALUES (?);", [name]).then(() => {
+            setName("");
+            fetchItems();
+        });
+    }
+
+    const fetchItems = () => {
+        db.getAllAsync("SELECT * FROM people;").then(setItems);
+    };
+
+    return (
+        <View>
+            <TextInput value={name} onChangeText={setName} placeholder="Nome" />
+            <Button title="Adicionar" onPress={addItem} />
+            <FlatList
+                data={items}
+                keyExtractor={item => item.id.toString()}
+                renderItem={({ item }) => <Text>{item.id}. {item.name}</Text>}
+            />
+        </View>
+    );
+}
+```
+
+**Quirks:**
+- `openDatabaseSync` cria o arquivo `.db` em storage privado do app
+- `execSync` para DDL (CREATE, DROP); `runAsync` para DML (INSERT, UPDATE, DELETE)
+- `getAllAsync` retorna `Promise<Array>` — use `.then()` ou `await`
+- Banco persiste entre sessões do app; use `DROP TABLE` para resetar em desenvolvimento
+- **Não funciona na web** — apenas iOS e Android
+
+**Dicas:**
+- Use `db.runAsync("DELETE FROM tabela WHERE id = ?;", [id])` para deletar por ID
+- Para migrations, controle versão com `PRAGMA user_version`
+- Encapsule em hook customizado para reutilizar lógica de DB entre telas
+
+---
+
+### Mídia
+
+#### 📦 `expo-av`
+**Propósito:** Reprodução e gravação de áudio/vídeo.
+
+**Instalação:**
+```bash
+npx expo install expo-av
+```
+
+**Reprodução de áudio:**
+```javascript
+import { Audio } from 'expo-av';
+
+// 1. Carregar arquivo
+const { sound } = await Audio.Sound.createAsync(
+  require('./assets/sounds/meu-audio.mp3'),
+  { shouldPlay: false }
+);
+
+// 2. Monitorar progresso
+sound.setOnPlaybackStatusUpdate(status => {
+  if (status.isLoaded) {
+    console.log(status.positionMillis, status.durationMillis);
+    if (status.didJustFinish) console.log('Terminou!');
+  }
+});
+
+// 3. Controles
+await sound.playAsync();                         // Tocar
+await sound.pauseAsync();                        // Pausar
+await sound.stopAsync();                         // Parar e voltar ao início
+await sound.setPositionAsync(5000);              // Pular para 5 segundos
+
+// 4. IMPORTANTE: descarregar ao sair da tela
+await sound.unloadAsync();
+```
+
+**Quirks:**
+- Sempre chame `unloadAsync()` no cleanup do `useEffect` para evitar vazamento de memória
+- Em iOS, pode precisar configurar `Audio.setAudioModeAsync({ playsInSilentModeIOS: true })`
+- Use `useRef` para guardar a referência do Sound (evita re-renders desnecessários)
+
+**Tela de exemplo:** [app/audio.jsx](app/audio.jsx)
+— reproduz `assets/sounds/oloco.mp3` com barra de progresso e controles
+
+---
+
+#### 📦 `expo-image-picker`
+**Propósito:** Abrir câmera ou galeria para capturar/selecionar imagens.
+
+**Instalação:**
+```bash
+npx expo install expo-image-picker
+```
+
+**Permissões (app.json) para produção:**
+```json
+{
+  "expo": {
+    "android": { "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE"] },
+    "ios": {
+      "infoPlist": {
+        "NSCameraUsageDescription": "Precisamos da câmera para tirar fotos.",
+        "NSPhotoLibraryUsageDescription": "Precisamos acessar sua galeria."
+      }
+    }
+  }
+}
+```
+
+**Uso:**
+```javascript
+import * as ImagePicker from 'expo-image-picker';
+
+// Tirar foto com a câmera
+async function tirarFoto() {
+  const { status } = await ImagePicker.requestCameraPermissionsAsync();
+  if (status !== 'granted') return;
+
+  const resultado = await ImagePicker.launchCameraAsync({
+    allowsEditing: true,   // Permite recortar após capturar
+    aspect: [4, 3],        // Proporção do recorte
+    quality: 0.8,          // Qualidade (0 a 1)
+  });
+
+  if (!resultado.canceled) {
+    const foto = resultado.assets[0]; // { uri, width, height }
+    console.log(foto.uri);
+  }
+}
+
+// Escolher da galeria
+async function escolherDaGaleria() {
+  const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (status !== 'granted') return;
+
+  const resultado = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    quality: 0.8,
+  });
+
+  if (!resultado.canceled) {
+    const imagem = resultado.assets[0];
+    // Exibir: <Image source={{ uri: imagem.uri }} />
+  }
+}
+```
+
+**Quirks:**
+- `resultado.canceled` (não `cancelled`) — grafia americana
+- `resultado.assets` é um array mesmo com seleção única — sempre use `[0]`
+- No Expo Go, as permissões funcionam normalmente para teste
+- Para múltipla seleção, use `allowsMultipleSelection: true`
+
+**Tela de exemplo:** [app/camera.jsx](app/camera.jsx)
+
+---
+
+#### 📦 `expo-haptics` (já instalado)
+**Propósito:** Vibração e feedback tátil do dispositivo.
+
+**Não requer instalação adicional** — já incluído no projeto.
+
+**Uso:**
+```javascript
+import * as Haptics from 'expo-haptics';
+
+// Impacto (toque físico simulado)
+Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);   // Leve
+Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);  // Médio
+Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);   // Forte
+
+// Notificação (resultado de operação)
+Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success); // Sucesso
+Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);   // Erro
+Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning); // Aviso
+
+// Seleção (ao navegar entre itens de uma lista, picker etc.)
+Haptics.selectionAsync();
+```
+
+**Quirks:**
+- Funciona APENAS em dispositivos físicos; emuladores ignoram silenciosamente
+- No iOS, o usuário pode desativar feedback háptico nas configurações do sistema
+- Não retorna Promise — chame sem await (é fire-and-forget)
+
+**Tela de exemplo:** [app/haptics.jsx](app/haptics.jsx)
+
+---
+
 ### Testes
 
 #### 📦 `jest` (~29.7.0)
@@ -938,10 +1257,12 @@ ddmi/
 ├── components/             # Componentes UI reutilizáveis
 ├── hooks/                  # Custom hooks
 ├── constants/              # Constantes da aplicação
-├── i18n/                  # Internacionalização
-├── utils/                 # Utilitários
-├── utilidades/            # Utilitários legados
-├── __tests__/             # Testes Jest
+├── contexts/               # Context API (AppContext, ThemeContext)
+├── dados/                  # Dados estáticos de exemplo (ex: afazeres.js)
+├── i18n/                   # Internacionalização
+├── utils/                  # Utilitários
+├── utilidades/             # Utilitários legados
+├── __tests__/              # Testes Jest
 └── package.json
 ```
 
@@ -1040,9 +1361,15 @@ unzip -l android/app/build/outputs/apk/debug/app-debug.apk | grep -E "bundle|ind
 | Sensores | expo-sensors | `Accelerometer.addListener()` |
 | Mapas Web | react-native-webview | `<WebView source={{ html }} />` |
 | Notificações | expo-notifications | `scheduleNotificationAsync()` |
-| http | fetch | `fetch(url)` nativo |
+| HTTP | fetch | `fetch(url)` nativo |
 | Icons | @expo/vector-icons | `<Ionicons name="" />` |
 | Charts | victory-native | `<VictoryLine data={} />` |
+| Banco Local | expo-sqlite | `openDatabaseSync()` + `runAsync()` |
+| Chave-valor | @react-native-async-storage/async-storage | `setItem()` / `getItem()` |
+| Listas | FlatList (nativo) | `<FlatList data={} renderItem={} />` |
+| Áudio | expo-av | `Audio.Sound.createAsync()` |
+| Câmera/Galeria | expo-image-picker | `launchCameraAsync()` |
+| Vibração | expo-haptics | `impactAsync()` / `notificationAsync()` |
 
 ---
 

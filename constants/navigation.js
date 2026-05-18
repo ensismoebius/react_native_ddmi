@@ -153,6 +153,54 @@ export const DRAWER_SCREENS = [
   },
 
   // ------------------------------------------
+  // SEÇÃO: BANCO DE DADOS LOCAL
+  // ------------------------------------------
+  {
+    name: 'sqlite_demo',      // Arquivo: app/sqlite_demo.jsx
+    label: 'SQLite Demo',
+    title: 'SQLite Demo',
+    icon: 'server-outline'
+  },
+  {
+    name: 'async_storage',    // Arquivo: app/async_storage.jsx
+    label: 'AsyncStorage',
+    title: 'AsyncStorage',
+    icon: 'save-outline'
+  },
+
+  // ------------------------------------------
+  // SEÇÃO: LISTAS
+  // ------------------------------------------
+  {
+    name: 'lista_tarefas',    // Arquivo: app/lista_tarefas.jsx
+    label: 'Lista de Tarefas',
+    title: 'Lista de Tarefas',
+    icon: 'checkmark-done-outline'
+  },
+
+  // ------------------------------------------
+  // SEÇÃO: MÍDIA
+  // ------------------------------------------
+  {
+    name: 'audio',            // Arquivo: app/audio.jsx
+    label: 'Player de Áudio',
+    title: 'Player de Áudio',
+    icon: 'musical-notes-outline'
+  },
+  {
+    name: 'camera',           // Arquivo: app/camera.jsx
+    label: 'Câmera / Galeria',
+    title: 'Câmera / Galeria',
+    icon: 'camera-outline'
+  },
+  {
+    name: 'haptics',          // Arquivo: app/haptics.jsx
+    label: 'Feedback Háptico',
+    title: 'Feedback Háptico',
+    icon: 'phone-portrait-outline'
+  },
+
+  // ------------------------------------------
   // OUTROS
   // ------------------------------------------
 {

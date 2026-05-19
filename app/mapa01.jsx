@@ -1,3 +1,11 @@
+// ============================================================
+// Mapa Estático — OpenStreetMap com posição GPS atual
+//
+// Dependências:
+//   npx expo install expo-location        (~18.1.6)
+//   npx expo install react-native-webview (^13.13.5)
+// ============================================================
+
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';

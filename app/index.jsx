@@ -1,3 +1,11 @@
+// ============================================================
+// Tela Inicial — menu principal do app
+//
+// Dependências:
+//   expo-router (incluído no projeto — npx expo install expo-router)
+//   nenhuma dependência adicional além das já instaladas no projeto
+// ============================================================
+
 /**
  * Tela Inicial (Home) do APP DDMI
  * 

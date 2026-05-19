@@ -60,6 +60,7 @@ Os alunos devem **digitar o código junto**, não copiar. O aprendizado vem do p
 **Arquivos:** `app/_layout.tsx`, `app/index.jsx`, `constants/navigation.js`
 **Duração estimada:** 40 minutos
 **Pré-requisitos:** Node.js instalado, noção básica de JavaScript e JSX
+**Dependências:** `npx expo install expo-router @expo/vector-icons react-native-safe-area-context react-native-gesture-handler @react-navigation/drawer @react-navigation/native`
 
 ### Objetivo
 O aluno entende como o Expo Router organiza telas como arquivos, como funciona o menu drawer, e consegue criar uma nova tela que aparece no menu.
@@ -142,6 +143,7 @@ Mostrar no celular: abrir o drawer deslizando da borda esquerda, clicar na nova 
 **Arquivo:** `app/consultaCEP.jsx`
 **Duração estimada:** 35 minutos
 **Pré-requisitos:** Aula 1, conhecimento de `useState` e `useEffect`
+**Dependências:** nenhuma nova — usa `fetch()` nativo do JavaScript e React Native built-ins. API: https://viacep.com.br (pública)
 
 ### Objetivo
 O aluno consegue fazer uma requisição HTTP GET para uma API pública, tratar estados de carregamento e erro, e exibir os dados retornados.
@@ -228,6 +230,7 @@ Testar com um CEP válido (ex: `01310100` — Av. Paulista), um CEP inválido (e
 **Arquivo:** `app/postJson.jsx`
 **Duração estimada:** 30 minutos
 **Pré-requisitos:** Aula 2
+**Dependências:** nenhuma nova — usa `fetch()` nativo. API: https://jsonplaceholder.typicode.com (pública)
 
 ### Objetivo
 O aluno consegue enviar dados estruturados para um servidor via POST com corpo JSON, e processar a resposta.
@@ -296,6 +299,7 @@ Preencher o formulário e enviar. Mostrar o `id` retornado na tela. Abrir o Netw
 **Arquivo:** `app/postGetPhp.jsx`, `api.php`
 **Duração estimada:** 40 minutos
 **Pré-requisitos:** Aulas 2 e 3
+**Dependências:** nenhuma nova no app — usa `fetch()` nativo. Backend: PHP com Apache/Nginx rodando `api.php` na rede local
 
 ### Objetivo
 O aluno entende como proteger uma API com chave de autenticação no cabeçalho, e como o app mobile consome essa API tanto via GET quanto via POST.
@@ -365,6 +369,7 @@ Mostrar: GET funcionando, POST funcionando, e o que acontece quando você apaga 
 **Arquivo:** `app/expressUsers.jsx`
 **Duração estimada:** 45 minutos
 **Pré-requisitos:** Aulas 2, 3 e 4
+**Dependências:** nenhuma nova no app — usa `fetch()` nativo. Backend: Node.js + Express (`npm install express cors`)
 
 ### Objetivo
 O aluno implementa as quatro operações de um CRUD (Create, Read, Update, Delete) consumindo uma API Express, e gerencia o estado da lista de usuários no frontend.
@@ -455,6 +460,7 @@ Criar dois usuários, editar um deles, deletar o outro. Mostrar que a lista atua
 **Arquivo:** `app/gps01.jsx`
 **Duração estimada:** 30 minutos
 **Pré-requisitos:** Aula 1, `useState` e `useEffect`
+**Dependências:** `npx expo install expo-location`
 
 ### Objetivo
 O aluno solicita permissão de localização ao usuário e obtém as coordenadas GPS do dispositivo uma única vez.
@@ -518,6 +524,7 @@ Mostrar no celular físico com GPS ativado. Mostrar que na primeira vez aparece 
 **Arquivo:** `app/gps02.jsx`
 **Duração estimada:** 40 minutos
 **Pré-requisitos:** Aula 6
+**Dependências:** `npx expo install expo-location react-native-webview`
 
 ### Objetivo
 O aluno implementa monitoramento contínuo de localização e exibe um mapa atualizado em tempo real via WebView com Leaflet.
@@ -593,6 +600,7 @@ Mostrar o mapa aparecendo com marcador na posição atual. Se possível, andar a
 **Arquivos:** `app/mapa01.jsx`, `app/mapa02.jsx`, `app/mapa03.jsx`
 **Duração estimada:** 35 minutos
 **Pré-requisitos:** Aula 7
+**Dependências:** `npx expo install expo-location react-native-webview` (mapa03 só precisa de `react-native-webview`)
 
 ### Objetivo
 O aluno compreende três variações de uso de mapas WebView: mapa estático, mapa ao vivo, e mapa controlado por coordenadas inseridas manualmente.
@@ -662,6 +670,7 @@ Testar com as coordenadas de São Paulo: `-23.5505, -46.6333`. Mostrar o marcado
 **Arquivo:** `app/route.jsx`
 **Duração estimada:** 45 minutos
 **Pré-requisitos:** Aulas 6, 7 e 8
+**Dependências:** `npx expo install expo-location react-native-webview`
 
 ### Objetivo
 O aluno integra geocoding (endereço → coordenadas), roteamento (cálculo de caminho) e visualização de mapa para construir um planejador de rotas completo.
@@ -736,6 +745,7 @@ Digitar "Aeroporto de Congonhas, São Paulo" e mostrar a rota ser desenhada a pa
 **Arquivo:** `app/sensor_accell.jsx`
 **Duração estimada:** 30 minutos
 **Pré-requisitos:** Aula 1, `useState` e `useEffect`
+**Dependências:** `npx expo install expo-sensors`
 
 ### Objetivo
 O aluno acessa o acelerômetro do dispositivo em tempo real e compreende os três eixos de medição e como controlar a subscription do sensor.
@@ -796,6 +806,7 @@ Colocar o celular na mesa (valores próximos a 0, 0, 1). Inclinar nos eixos e mo
 **Arquivos:** `app/sensor_gyroscope.jsx`, `app/sensor_motion.jsx`
 **Duração estimada:** 40 minutos
 **Pré-requisitos:** Aula 10
+**Dependências:** `npx expo install expo-sensors victory-native react-native-svg`
 
 ### Objetivo
 O aluno lê dados do giroscópio e visualiza os valores históricos em gráficos de linha em tempo real usando Victory Native.
@@ -877,6 +888,7 @@ Mostrar os três gráficos em tempo real. Rotacionar o celular devagar e mostrar
 **Arquivo:** `app/sensor_magnetometer.jsx`
 **Duração estimada:** 25 minutos
 **Pré-requisitos:** Aulas 10 e 11
+**Dependências:** `npx expo install expo-sensors victory-native react-native-svg`
 
 ### Objetivo
 O aluno acessa o magnetômetro e compreende o que ele mede, suas limitações práticas, e como visualizar os dados.
@@ -923,6 +935,7 @@ Mostrar os valores em repouso. Depois aproximar um ímã (ou outro celular) e mo
 **Arquivos:** `app/notificacoes.jsx`, `app/notificacoes2.jsx`, `app/notificacoes3.jsx`
 **Duração estimada:** 40 minutos
 **Pré-requisitos:** Aula 1
+**Dependências:** `npx expo install expo-notifications expo-device`
 
 ### Objetivo
 O aluno implementa notificações locais com permissão, configura handler de primeiro plano, agenda notificações com delay e usa som customizado.
@@ -1012,9 +1025,10 @@ Disparar cada tipo de notificação. Mostrar que ao minimizar o app e disparar n
 **Arquivo:** `app/sqlite_demo.jsx`
 **Duração estimada:** 45 minutos
 **Pré-requisitos:** Aula 1, noção básica de SQL
+**Dependências:** `npx expo install expo-sqlite` (incluído no Expo SDK 53+)
 
 ### Objetivo
-O aluno implementa um CRUD completo em banco de dados SQLite local: criar tabela, inserir, consultar e exibir em lista.
+O aluno implementa um CRUD completo em banco de dados SQLite local: criar tabela, inserir, consultar, atualizar e deletar registros.
 
 ### Conceitos ensinados
 - `expo-sqlite`: banco relacional embutido no app
@@ -1023,6 +1037,7 @@ O aluno implementa um CRUD completo em banco de dados SQLite local: criar tabela
 - `runAsync()` para DML (INSERT, UPDATE, DELETE)
 - `getAllAsync()` para SELECT — retorna array de objetos
 - Parâmetros posicionais `?` para prevenir SQL Injection
+- Estado `editingId` para alternar entre modo criar e editar
 - Diferença entre SQLite e AsyncStorage
 
 ### Roteiro
@@ -1049,38 +1064,44 @@ Isso previne SQL Injection — se o usuário digitar `'; DROP TABLE pessoas;--`,
 #### 3. Código ao vivo (20 min)
 ```jsx
 const db = SQLite.openDatabaseSync('demo.db');
+const [editingId, setEditingId] = useState(null); // null = criar; número = editar
 
-// Criar tabela ao montar o componente (só uma vez)
-useEffect(() => {
-  db.execSync(
-    'CREATE TABLE IF NOT EXISTS pessoas (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT);'
-  );
-  buscarItens();
-}, []);
-
-// Inserir
-async function adicionarItem() {
-  if (!nome.trim()) return;
-  await db.runAsync('INSERT INTO pessoas (nome) VALUES (?);', [nome]);
-  setNome('');
-  buscarItens();
+// CREATE — INSERT
+async function addItem() {
+  await db.runAsync('INSERT INTO people (name) VALUES (?);', [name]);
+  clearForm();  fetchItems();
 }
 
-// Consultar
-async function buscarItens() {
-  const linhas = await db.getAllAsync('SELECT * FROM pessoas;');
-  setItens(linhas); // [{ id: 1, nome: 'João' }, ...]
+// READ — SELECT
+async function fetchItems() {
+  const rows = await db.getAllAsync('SELECT * FROM people;');
+  setItems(rows);
+}
+
+// UPDATE — UPDATE SET
+async function updateItem() {
+  await db.runAsync('UPDATE people SET name = ? WHERE id = ?;', [name, editingId]);
+  clearForm();  fetchItems();
+}
+
+// DELETE — DELETE WHERE
+function deleteItem(id) {
+  Alert.alert('Excluir', 'Confirmar?', [
+    { text: 'Cancelar', style: 'cancel' },
+    { text: 'Excluir', style: 'destructive',
+      onPress: async () => { await db.runAsync('DELETE FROM people WHERE id = ?;', [id]); fetchItems(); } },
+  ]);
 }
 ```
 
-Mostre a `FlatList` exibindo `{item.id}. {item.nome}`.
+Mostre que `editingId` controla o texto do botão: "Adicionar" vs "Atualizar". Ao clicar em "Editar" num item, o `TextInput` já aparece preenchido.
 
 #### 4. Demonstração (5 min)
-Adicionar 3 itens, fechar o app, reabrir — os itens persistem. Isso demonstra a persistência do SQLite.
+Adicionar 3 itens, editar um, deletar outro, fechar e reabrir — itens persistem. Demonstra persistência e CRUD completo.
 
 #### 5. Exercícios
-1. **Fácil:** Adicione um botão "Limpar tudo" que executa `DELETE FROM pessoas`.
-2. **Médio:** Implemente deletar por item — adicione um botão de lixeira em cada item da lista.
+1. **Fácil:** Observe que o botão muda de "Adicionar" para "Atualizar" ao entrar no modo edição.
+2. **Médio:** Adicione confirmação via `Alert` antes de deletar (já incluído no código — estude o padrão).
 3. **Desafio:** Adicione uma segunda coluna `email TEXT` e atualize o formulário para incluir esse campo.
 
 ### Perguntas para fixação
@@ -1096,16 +1117,18 @@ Adicionar 3 itens, fechar o app, reabrir — os itens persistem. Isso demonstra 
 **Arquivo:** `app/async_storage.jsx`
 **Duração estimada:** 35 minutos
 **Pré-requisitos:** Aula 14 (para comparar com SQLite)
+**Dependências:** `npx expo install @react-native-async-storage/async-storage`
 
 ### Objetivo
-O aluno armazena, recupera e apaga dados no AsyncStorage, compreende o modelo chave-valor e sabe quando usá-lo em vez de SQLite.
+O aluno implementa um CRUD completo com AsyncStorage usando o padrão de array JSON serializado: adiciona, lê, edita e remove itens persistentes sem SQL.
 
 ### Conceitos ensinados
-- `AsyncStorage.setItem(chave, valor)` — gravar string
-- `AsyncStorage.getItem(chave)` — ler (retorna `null` se não existir)
-- `AsyncStorage.removeItem(chave)` — apagar
-- `AsyncStorage.getAllKeys()` — listar chaves
-- `JSON.stringify` / `JSON.parse` para armazenar objetos
+- `AsyncStorage.setItem(chave, valor)` — gravar string (C e U)
+- `AsyncStorage.getItem(chave)` — ler (retorna `null` se não existir) (R)
+- `AsyncStorage.removeItem(chave)` — apagar a chave inteira (D total)
+- `JSON.stringify` / `JSON.parse` para armazenar arrays de objetos
+- Padrão: uma chave guarda o array inteiro; Update = map; Delete = filter
+- Estado `editandoId` para alternar modo criar/editar (igual ao SQLite)
 - Convenção de nomenclatura de chaves com `@prefixo:`
 - Quando usar AsyncStorage vs SQLite
 
@@ -1127,41 +1150,51 @@ A operação é sempre assíncrona — use `await`."
 
 #### 3. Código ao vivo (15 min)
 ```jsx
-// Salvar
-async function salvarValor() {
-  await AsyncStorage.setItem('@ddmi:nome', texto);
-  setTexto('');
-  await carregarValor();
+const CHAVE_NOTAS = '@meuapp:notas';
+
+// READ — carrega array JSON ao montar
+async function carregarNotas() {
+  const json = await AsyncStorage.getItem(CHAVE_NOTAS);
+  setNotas(json ? JSON.parse(json) : []);
 }
 
-// Ler
-async function carregarValor() {
-  const val = await AsyncStorage.getItem('@ddmi:nome');
-  setValorSalvo(val); // null se não existir
+// Helper: persiste o array e atualiza o estado
+async function persistir(lista) {
+  await AsyncStorage.setItem(CHAVE_NOTAS, JSON.stringify(lista));
+  setNotas(lista);
 }
 
-// Apagar
-async function apagarValor() {
-  await AsyncStorage.removeItem('@ddmi:nome');
-  setValorSalvo(null);
+// CREATE — acrescenta item ao array
+async function adicionarNota() {
+  await persistir([...notas, { id: Date.now(), texto }]);
 }
 
-// Listar tudo (útil para depurar)
-async function listarChaves() {
-  const chaves = await AsyncStorage.getAllKeys();
-  setTodasAsChaves(chaves);
+// UPDATE — substitui o texto do item editado
+async function atualizarNota() {
+  await persistir(notas.map(n => n.id === editandoId ? { ...n, texto } : n));
+}
+
+// DELETE — remove item pelo id
+async function excluirNota(id) {
+  await persistir(notas.filter(n => n.id !== id));
+}
+
+// DELETE ALL — apaga a chave inteira
+async function excluirTudo() {
+  await AsyncStorage.removeItem(CHAVE_NOTAS);
+  setNotas([]);
 }
 ```
 
-"Mostre o ciclo completo: salvar, fechar e reabrir o app, o valor ainda está lá."
+"O Update usa `Array.map` e o Delete usa `Array.filter` — as mesmas primitivas do Aula 16. O `JSON.stringify` serializa o array inteiro; o `JSON.parse` restaura. Mostre que `editandoId` controla o botão, igual ao SQLite."
 
 #### 4. Demonstração (3 min)
-Salvar um valor, fechar o app completamente, reabrir — o valor persiste. Apagar e confirmar que sumiu.
+Criar 3 notas, editar uma, deletar outra, fechar o app, reabrir — lista persiste. Limpar tudo e confirmar que sumiu.
 
 #### 5. Exercícios
-1. **Fácil:** Salve e carregue um objeto JSON: `{ nome: 'Ana', idade: 25 }`.
-2. **Médio:** Implemente salvar as configurações de tema (claro/escuro) e carregá-las ao abrir o app.
-3. **Desafio:** Implemente um histórico de buscas de CEP: cada CEP consultado é salvo no AsyncStorage. Ao abrir a tela de CEP, carregue e exiba os últimos 5 buscados.
+1. **Fácil:** Observe que editar uma nota usa o mesmo padrão `editandoId` do SQLite — o botão muda de "Adicionar" para "Salvar edição".
+2. **Médio:** Adicione um campo `prioridade` (alta/média/baixa) à nota e exiba na lista com cor diferente.
+3. **Desafio:** Implemente um histórico de buscas de CEP: cada CEP consultado é salvo como nota no AsyncStorage. Ao abrir a tela de CEP, carregue e exiba os últimos 5 buscados.
 
 ### Perguntas para fixação
 1. O que `getItem` retorna se a chave não existir?
@@ -1176,6 +1209,7 @@ Salvar um valor, fechar o app completamente, reabrir — o valor persiste. Apaga
 **Arquivo:** `app/lista_tarefas.jsx`
 **Duração estimada:** 35 minutos
 **Pré-requisitos:** Aula 1, `useState`
+**Dependências:** nenhuma nova — usa apenas React Native built-ins
 
 ### Objetivo
 O aluno renderiza uma lista de dados com `FlatList`, implementa toggle de estado por item e compreende por que `FlatList` é superior a `.map()` para listas longas.
@@ -1271,6 +1305,7 @@ Tocar em itens para marcar/desmarcar. Mostrar o texto riscado ao concluir.
 **Arquivo:** `app/audio.jsx`
 **Duração estimada:** 40 minutos
 **Pré-requisitos:** Aula 1, `useRef`
+**Dependências:** `npx expo install expo-av`
 
 ### Objetivo
 O aluno carrega e reproduz um arquivo de áudio local com controles play/pause/stop e barra de progresso.
@@ -1360,6 +1395,7 @@ Tocar o áudio, pausar no meio, retomar, parar e mostrar que volta ao início.
 **Arquivo:** `app/camera.jsx`
 **Duração estimada:** 35 minutos
 **Pré-requisitos:** Aula 1
+**Dependências:** `npx expo install expo-image-picker`
 
 ### Objetivo
 O aluno solicita permissão de câmera/galeria, captura ou seleciona uma imagem, e exibe a imagem selecionada na tela com seus metadados.
@@ -1448,6 +1484,7 @@ Mostrar ambos os fluxos: câmera (tirar nova foto) e galeria (escolher existente
 **Arquivo:** `app/haptics.jsx`
 **Duração estimada:** 20 minutos
 **Pré-requisitos:** Aula 1
+**Dependências:** `npx expo install expo-haptics`
 
 ### Objetivo
 O aluno implementa os três tipos de feedback háptico do `expo-haptics` e entende quando usar cada um para melhorar a experiência do usuário.
@@ -1512,6 +1549,7 @@ Testar no celular físico, tocando em cada botão e descrevendo o que se sente.
 **Arquivo:** `app/settings.jsx`, `contexts/AppContext.js`, `contexts/ThemeContext.js`
 **Duração estimada:** 50 minutos
 **Pré-requisitos:** Aulas 1 a 3, React hooks
+**Dependências:** `npx expo install i18next react-i18next expo-localization`
 
 ### Objetivo
 O aluno compreende o Context API do React, implementa providers de estado global para idioma e tema, e consome esses contextos em qualquer componente do app.

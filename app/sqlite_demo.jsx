@@ -1,70 +1,172 @@
-// npm install expo-sqlite
+// ============================================================
+// Banco de Dados Local com SQLite — CRUD completo
+//
+// Dependências:
+//   npx expo install expo-sqlite (incluído no Expo SDK 53+)
+//
+// Operações demonstradas:
+//   CREATE — INSERT INTO people
+//   READ   — SELECT * FROM people
+//   UPDATE — UPDATE people SET name = ? WHERE id = ?
+//   DELETE — DELETE FROM people WHERE id = ?
+// ============================================================
 
 import * as SQLite from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Button, FlatList, Text, TextInput, View } from "react-native";
+import {
+    Alert,
+    Button,
+    FlatList,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
 
 export default function SqliteDemo() {
-    // 1. Open (or create) the database
     const db = SQLite.openDatabaseSync("demo.db");
 
-    // State for input and items
     const [name, setName] = useState("");
     const [items, setItems] = useState([]);
+    const [editingId, setEditingId] = useState(null); // null = criar; número = editar
 
-    // 2. Create table if not exists
     useEffect(() => {
         db.execSync(
             "CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);"
         );
         fetchItems();
-    }, []); // Only run once on mount
+    }, []);
 
-    // 3. Insert item
-    function addItem() {
+    // CREATE
+    async function addItem() {
         if (!name.trim()) return;
-        db.runAsync("INSERT INTO people (name) VALUES (?);", [name]).then(() => {
-            setName("");
-            fetchItems();
-        });
+        await db.runAsync("INSERT INTO people (name) VALUES (?);", [name]);
+        clearForm();
+        fetchItems();
     }
 
-    // 4. Query items
-    const fetchItems = () => {
-        db.getAllAsync("SELECT * FROM people;").then((allRows) => {
-            setItems(allRows);
-        });
-    };
+    // READ
+    async function fetchItems() {
+        const rows = await db.getAllAsync("SELECT * FROM people;");
+        setItems(rows);
+    }
 
-    // 5. UI
+    // UPDATE
+    async function updateItem() {
+        if (!name.trim()) return;
+        await db.runAsync("UPDATE people SET name = ? WHERE id = ?;", [name, editingId]);
+        clearForm();
+        fetchItems();
+    }
+
+    // DELETE
+    function deleteItem(id) {
+        Alert.alert("Excluir", "Confirmar exclusão?", [
+            { text: "Cancelar", style: "cancel" },
+            {
+                text: "Excluir",
+                style: "destructive",
+                onPress: async () => {
+                    await db.runAsync("DELETE FROM people WHERE id = ?;", [id]);
+                    fetchItems();
+                },
+            },
+        ]);
+    }
+
+    function startEdit(item) {
+        setEditingId(item.id);
+        setName(item.name);
+    }
+
+    function clearForm() {
+        setEditingId(null);
+        setName("");
+    }
+
     return (
-        <View style={{ flex: 1, padding: 24, backgroundColor: "#fff" }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 12 }}>
-                Demonstração de Banco de Dados Local (SQLite)
+        <View style={styles.container}>
+            <Text style={styles.titulo}>SQLite — CRUD Completo</Text>
+
+            <Text style={styles.modo}>
+                {editingId ? `Editando ID ${editingId}` : "Novo registro"}
             </Text>
-            <Text>Passo 1: Abrir banco de dados</Text>
-            <Text>Passo 2: Criar tabela se não existir</Text>
-            <Text>Passo 3: Inserir dados</Text>
-            <Text>Passo 4: Consultar dados</Text>
-            <View style={{ flexDirection: "row", marginVertical: 12 }}>
+
+            <View style={styles.linha}>
                 <TextInput
-                    style={{ borderWidth: 1, borderColor: "#ccc", flex: 1, marginRight: 8, padding: 8 }}
-                    placeholder="Digite o nome"
+                    style={styles.entrada}
+                    placeholder="Nome"
                     value={name}
                     onChangeText={setName}
                 />
-                <Button title="Adicionar" onPress={addItem} />
+                <Button
+                    title={editingId ? "Atualizar" : "Adicionar"}
+                    onPress={editingId ? updateItem : addItem}
+                />
+                {editingId && (
+                    <Button title="Cancelar" color="#888" onPress={clearForm} />
+                )}
             </View>
-            <Text style={{ marginBottom: 8 }}>Pessoas no banco:</Text>
 
+            <Text style={styles.rotulo}>Pessoas ({items.length})</Text>
             <FlatList
                 data={items}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
-                    <Text style={{ padding: 4 }}>{item.id}. {item.name}</Text>
+                    <View style={[styles.item, editingId === item.id && styles.itemEditando]}>
+                        <Text style={styles.itemTexto}>{item.id}. {item.name}</Text>
+                        <TouchableOpacity onPress={() => startEdit(item)} style={styles.btnEditar}>
+                            <Text style={styles.btnEditarTexto}>Editar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => deleteItem(item.id)} style={styles.btnExcluir}>
+                            <Text style={styles.btnExcluirTexto}>Excluir</Text>
+                        </TouchableOpacity>
+                    </View>
                 )}
-                ListEmptyComponent={<Text style={{ color: '#888' }}>Nenhum dado ainda.</Text>}
+                ListEmptyComponent={<Text style={styles.vazio}>Nenhum dado ainda.</Text>}
             />
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: { flex: 1, padding: 24, backgroundColor: "#fff" },
+    titulo: { fontSize: 20, fontWeight: "bold", marginBottom: 4 },
+    modo: { fontSize: 13, color: "#6366f1", fontStyle: "italic", marginBottom: 12 },
+    linha: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 16 },
+    entrada: {
+        flex: 1,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 8,
+        padding: 10,
+        fontSize: 15,
+    },
+    rotulo: { fontSize: 13, fontWeight: "600", color: "#555", marginBottom: 8 },
+    item: {
+        flexDirection: "row",
+        alignItems: "center",
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: "#f0f0f0",
+    },
+    itemEditando: { backgroundColor: "#f0f0ff" },
+    itemTexto: { flex: 1, fontSize: 15 },
+    btnEditar: {
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        backgroundColor: "#e0f2fe",
+        borderRadius: 6,
+        marginRight: 8,
+    },
+    btnEditarTexto: { color: "#0369a1", fontSize: 13 },
+    btnExcluir: {
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        backgroundColor: "#fee2e2",
+        borderRadius: 6,
+    },
+    btnExcluirTexto: { color: "#dc2626", fontSize: 13 },
+    vazio: { color: "#aaa", fontStyle: "italic", textAlign: "center", marginTop: 20 },
+});

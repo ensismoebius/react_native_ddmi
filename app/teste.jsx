@@ -1,5 +1,10 @@
-// npm install victory - native@legacy--save
-// npm install react-native-svg --save
+// ============================================================
+// Teste de Gráfico de Barras — Victory Native + SVG
+//
+// Dependências:
+//   npx expo install victory-native   (^37.3.6)
+//   npx expo install react-native-svg (^15.11.2)
+// ============================================================
 
 
 

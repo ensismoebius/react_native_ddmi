@@ -1,6 +1,11 @@
-// npm install react-native-svg
-// npm install victory - native@legacy--save
-// npm install react-native-svg --save
+// ============================================================
+// Giroscópio com Gráficos em Tempo Real (variante sensor_motion)
+//
+// Dependências:
+//   npx expo install expo-sensors     (^14.1.4)
+//   npx expo install victory-native   (^37.3.6)
+//   npx expo install react-native-svg (^15.11.2)
+// ============================================================
 
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, StyleSheet } from 'react-native';

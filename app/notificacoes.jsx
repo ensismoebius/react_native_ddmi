@@ -1,3 +1,10 @@
+// ============================================================
+// Notificações Locais — básico (sem som customizado)
+//
+// Dependências:
+//   npx expo install expo-notifications (^0.31.4)
+// ============================================================
+
 import React, { useEffect, useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import * as Notifications from 'expo-notifications';

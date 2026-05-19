@@ -1,184 +1,170 @@
 // ============================================================
-// AsyncStorage — armazenamento chave-valor persistente
+// AsyncStorage — CRUD de notas (armazenamento chave-valor persistente)
 //
-// Conceitos demonstrados:
-//   - AsyncStorage.setItem: salvar um valor
-//   - AsyncStorage.getItem: ler um valor salvo
-//   - AsyncStorage.removeItem: apagar um valor
-//   - AsyncStorage.getAllKeys: listar todas as chaves salvas
-//   - Os dados PERSISTEM entre sessões (fechou o app, ainda estão lá)
-//   - Diferença de SQLite: chave-valor simples, ideal para preferências
-//     e tokens de autenticação; não é banco relacional
-//
-// Instalação:
+// Dependências:
 //   npx expo install @react-native-async-storage/async-storage
+//
+// Padrão usado: uma única chave armazena um array JSON com todos os registros.
+// Operações demonstradas:
+//   CREATE — adiciona item ao array e persiste com setItem
+//   READ   — carrega array com getItem + JSON.parse ao montar
+//   UPDATE — substitui item no array (map) e persiste com setItem
+//   DELETE — remove item do array (filter) e persiste com setItem
+//            removeItem limpa a chave inteira (DELETE ALL)
+//
+// Os dados PERSISTEM entre sessões (fechou o app, ainda estão lá).
+// Diferença de SQLite: sem SQL, sem tabelas — ideal para listas simples,
+// tokens de autenticação e preferências do usuário.
 // ============================================================
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
+    Alert,
     Button,
     FlatList,
     StyleSheet,
     Text,
     TextInput,
+    TouchableOpacity,
     View,
 } from "react-native";
 
-// Chave fixa usada para salvar o nome do usuário
-// Em apps reais: "token_jwt", "preferencias_usuario", "ultimo_login" etc.
-const CHAVE_NOME = "@meuapp:nome_usuario";
+// Chave única que guarda o array completo de notas como JSON
+const CHAVE_NOTAS = "@meuapp:notas";
 
 export default function TelaAsyncStorage() {
-
-    // Valor digitado no campo de texto
+    const [notas, setNotas] = useState([]);          // [{ id, texto }, ...]
     const [texto, setTexto] = useState("");
+    const [editandoId, setEditandoId] = useState(null); // null = criar; id = editar
 
-    // Valor lido do AsyncStorage (o que foi salvo anteriormente)
-    const [valorSalvo, setValorSalvo] = useState(null);
-
-    // Lista de todas as chaves armazenadas (para exibir no rodapé)
-    const [todasAsChaves, setTodasAsChaves] = useState([]);
-
-    // Indica se está carregando (evita múltiplos cliques)
-    const [carregando, setCarregando] = useState(false);
-
-    // Mensagem de status (sucesso ou erro)
-    const [mensagem, setMensagem] = useState("");
-
-    // --------------------------------------------------------
-    // useEffect — carrega o valor salvo ao abrir a tela
-    // Demonstra que AsyncStorage persiste entre sessões
-    // --------------------------------------------------------
     useEffect(() => {
-        carregarValor();
-        listarChaves();
+        carregarNotas();
     }, []);
 
-    // --------------------------------------------------------
-    // salvarValor — grava o texto digitado no AsyncStorage
-    // --------------------------------------------------------
-    async function salvarValor() {
-        if (!texto.trim()) {
-            setMensagem("Digite algo antes de salvar.");
-            return;
-        }
-
-        setCarregando(true);
-        try {
-            // setItem(chave, valor) — ambos devem ser strings
-            // Para objetos use: JSON.stringify(objeto)
-            await AsyncStorage.setItem(CHAVE_NOME, texto);
-            setMensagem("Salvo com sucesso!");
-            setTexto(""); // Limpa o campo após salvar
-            await carregarValor(); // Atualiza o que está exibido
-            await listarChaves();  // Atualiza lista de chaves
-        } catch (erro) {
-            setMensagem("Erro ao salvar: " + erro.message);
-        } finally {
-            setCarregando(false);
-        }
+    // READ — deserializa o array JSON salvo no storage
+    async function carregarNotas() {
+        const json = await AsyncStorage.getItem(CHAVE_NOTAS);
+        setNotas(json ? JSON.parse(json) : []);
     }
 
-    // --------------------------------------------------------
-    // carregarValor — lê o valor associado à CHAVE_NOME
-    // --------------------------------------------------------
-    async function carregarValor() {
-        try {
-            // getItem retorna null se a chave não existir
-            const valor = await AsyncStorage.getItem(CHAVE_NOME);
-            setValorSalvo(valor); // null ou string
-        } catch (erro) {
-            setMensagem("Erro ao carregar: " + erro.message);
-        }
+    // Persiste o array atualizado e sincroniza o estado
+    async function persistir(lista) {
+        await AsyncStorage.setItem(CHAVE_NOTAS, JSON.stringify(lista));
+        setNotas(lista);
     }
 
-    // --------------------------------------------------------
-    // apagarValor — remove a chave do storage
-    // --------------------------------------------------------
-    async function apagarValor() {
-        setCarregando(true);
-        try {
-            await AsyncStorage.removeItem(CHAVE_NOME);
-            setValorSalvo(null);
-            setMensagem("Valor apagado.");
-            await listarChaves();
-        } catch (erro) {
-            setMensagem("Erro ao apagar: " + erro.message);
-        } finally {
-            setCarregando(false);
-        }
+    // CREATE — acrescenta novo item ao array
+    async function adicionarNota() {
+        if (!texto.trim()) return;
+        await persistir([...notas, { id: Date.now(), texto }]);
+        setTexto("");
     }
 
-    // --------------------------------------------------------
-    // listarChaves — obtém todas as chaves salvas no storage
-    // Útil para depurar o que está armazenado no app
-    // --------------------------------------------------------
-    async function listarChaves() {
-        try {
-            // getAllKeys retorna array com todos os nomes de chaves
-            const chaves = await AsyncStorage.getAllKeys();
-            setTodasAsChaves(chaves);
-        } catch (erro) {
-            console.error("Erro ao listar chaves:", erro);
-        }
+    // UPDATE — substitui o texto do item no array
+    async function atualizarNota() {
+        if (!texto.trim()) return;
+        await persistir(notas.map(n => n.id === editandoId ? { ...n, texto } : n));
+        setTexto("");
+        setEditandoId(null);
+    }
+
+    // DELETE — remove o item pelo id
+    function excluirNota(id) {
+        Alert.alert("Excluir", "Confirmar exclusão?", [
+            { text: "Cancelar", style: "cancel" },
+            {
+                text: "Excluir",
+                style: "destructive",
+                onPress: () => persistir(notas.filter(n => n.id !== id)),
+            },
+        ]);
+    }
+
+    // DELETE ALL — remove a chave inteira do storage
+    function excluirTudo() {
+        Alert.alert("Limpar tudo", "Remove todas as notas do storage?", [
+            { text: "Cancelar", style: "cancel" },
+            {
+                text: "Limpar",
+                style: "destructive",
+                onPress: async () => {
+                    await AsyncStorage.removeItem(CHAVE_NOTAS);
+                    setNotas([]);
+                },
+            },
+        ]);
+    }
+
+    function iniciarEdicao(nota) {
+        setEditandoId(nota.id);
+        setTexto(nota.texto);
+    }
+
+    function cancelarEdicao() {
+        setEditandoId(null);
+        setTexto("");
     }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.titulo}>AsyncStorage</Text>
+            <Text style={styles.titulo}>AsyncStorage — CRUD</Text>
             <Text style={styles.descricao}>
-                Dados salvos aqui persistem mesmo após fechar o app.
-                Ideal para tokens, preferências e configurações simples.
+                Notas salvas como array JSON em uma única chave.{"\n"}
+                Dados persistem após fechar o app.
             </Text>
 
-            {/* ---- Campo de entrada ---- */}
-            <Text style={styles.rotulo}>Valor para salvar</Text>
+            <Text style={styles.modo}>
+                {editandoId ? "Modo edição" : "Nova nota"}
+            </Text>
+
             <TextInput
                 style={styles.entrada}
                 value={texto}
                 onChangeText={setTexto}
-                placeholder="Ex: João da Silva"
+                placeholder="Digite a nota..."
+                multiline
             />
 
-            {/* ---- Botões ---- */}
             <View style={styles.filaBotoes}>
-                <View style={styles.botaoWrapper}>
-                    <Button title="Salvar" onPress={salvarValor} />
+                <View style={{ flex: 1 }}>
+                    <Button
+                        title={editandoId ? "Salvar edição" : "Adicionar"}
+                        onPress={editandoId ? atualizarNota : adicionarNota}
+                    />
                 </View>
-                <View style={styles.botaoWrapper}>
-                    <Button title="Apagar" color="#ef4444" onPress={apagarValor} />
-                </View>
+                {editandoId && (
+                    <View style={{ flex: 1 }}>
+                        <Button title="Cancelar" color="#888" onPress={cancelarEdicao} />
+                    </View>
+                )}
             </View>
 
-            {carregando && <ActivityIndicator style={{ marginTop: 8 }} />}
-
-            {/* ---- Mensagem de retorno ---- */}
-            {mensagem !== "" && (
-                <Text style={styles.mensagem}>{mensagem}</Text>
-            )}
-
-            {/* ---- Valor atualmente salvo ---- */}
-            <View style={styles.cartao}>
-                <Text style={styles.rotuloCartao}>Valor salvo com a chave:</Text>
-                <Text style={styles.chave}>{CHAVE_NOME}</Text>
-                <Text style={styles.valorSalvo}>
-                    {/* Mostra o valor ou avisa que está vazio */}
-                    {valorSalvo !== null ? valorSalvo : "(nenhum valor salvo)"}
-                </Text>
+            <View style={styles.cabecalho}>
+                <Text style={styles.rotulo}>Notas ({notas.length})</Text>
+                {notas.length > 0 && (
+                    <TouchableOpacity onPress={excluirTudo}>
+                        <Text style={styles.limparTudo}>Limpar tudo</Text>
+                    </TouchableOpacity>
+                )}
             </View>
 
-            {/* ---- Lista de todas as chaves (debug) ---- */}
-            <Text style={styles.rotulo}>Todas as chaves no storage ({todasAsChaves.length})</Text>
             <FlatList
-                data={todasAsChaves}
-                keyExtractor={(item, index) => index.toString()}
+                data={notas}
+                keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
-                    <Text style={styles.itemChave}>• {item}</Text>
+                    <View style={[styles.item, editandoId === item.id && styles.itemEditando]}>
+                        <Text style={styles.itemTexto}>{item.texto}</Text>
+                        <TouchableOpacity onPress={() => iniciarEdicao(item)} style={styles.btnEditar}>
+                            <Text style={styles.btnEditarTexto}>Editar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => excluirNota(item.id)} style={styles.btnExcluir}>
+                            <Text style={styles.btnExcluirTexto}>Excluir</Text>
+                        </TouchableOpacity>
+                    </View>
                 )}
                 ListEmptyComponent={
-                    <Text style={styles.vazio}>Nenhuma chave armazenada.</Text>
+                    <Text style={styles.vazio}>Nenhuma nota salva.</Text>
                 }
             />
         </View>
@@ -186,31 +172,10 @@ export default function TelaAsyncStorage() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: "#f5f5f5",
-    },
-    titulo: {
-        fontSize: 22,
-        fontWeight: "bold",
-        color: "#1a1a1a",
-        marginBottom: 4,
-    },
-    descricao: {
-        fontSize: 13,
-        color: "#666",
-        marginBottom: 16,
-        lineHeight: 20,
-    },
-    rotulo: {
-        fontSize: 13,
-        fontWeight: "600",
-        color: "#555",
-        marginBottom: 6,
-        textTransform: "uppercase",
-        letterSpacing: 0.4,
-    },
+    container: { flex: 1, padding: 24, backgroundColor: "#f5f5f5" },
+    titulo: { fontSize: 22, fontWeight: "bold", marginBottom: 4 },
+    descricao: { fontSize: 13, color: "#666", marginBottom: 16, lineHeight: 20 },
+    modo: { fontSize: 13, color: "#6366f1", fontStyle: "italic", marginBottom: 6 },
     entrada: {
         backgroundColor: "#fff",
         borderWidth: 1,
@@ -218,57 +183,45 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 12,
         fontSize: 15,
-        marginBottom: 12,
+        marginBottom: 10,
+        minHeight: 60,
+        textAlignVertical: "top",
     },
-    filaBotoes: {
+    filaBotoes: { flexDirection: "row", gap: 8, marginBottom: 16 },
+    cabecalho: {
         flexDirection: "row",
-        gap: 12,
+        justifyContent: "space-between",
+        alignItems: "center",
         marginBottom: 8,
     },
-    botaoWrapper: {
-        flex: 1,
-    },
-    mensagem: {
-        marginTop: 8,
-        padding: 10,
-        backgroundColor: "#e0f2fe",
-        borderRadius: 6,
-        fontSize: 13,
-        color: "#0369a1",
-    },
-    cartao: {
+    rotulo: { fontSize: 13, fontWeight: "600", color: "#555", textTransform: "uppercase" },
+    limparTudo: { fontSize: 13, color: "#dc2626" },
+    item: {
+        flexDirection: "row",
+        alignItems: "center",
         backgroundColor: "#fff",
-        borderRadius: 10,
-        padding: 14,
-        marginVertical: 16,
+        borderRadius: 8,
+        padding: 12,
+        marginBottom: 8,
         borderWidth: 1,
         borderColor: "#e2e8f0",
     },
-    rotuloCartao: {
-        fontSize: 12,
-        color: "#888",
-        marginBottom: 4,
+    itemEditando: { borderColor: "#6366f1", borderWidth: 2 },
+    itemTexto: { flex: 1, fontSize: 15, color: "#1a1a1a" },
+    btnEditar: {
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        backgroundColor: "#e0f2fe",
+        borderRadius: 6,
+        marginRight: 6,
     },
-    chave: {
-        fontSize: 12,
-        fontFamily: "monospace",
-        color: "#6366f1",
-        marginBottom: 8,
+    btnEditarTexto: { color: "#0369a1", fontSize: 13 },
+    btnExcluir: {
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        backgroundColor: "#fee2e2",
+        borderRadius: 6,
     },
-    valorSalvo: {
-        fontSize: 18,
-        fontWeight: "600",
-        color: "#1a1a1a",
-    },
-    itemChave: {
-        fontSize: 13,
-        fontFamily: "monospace",
-        color: "#444",
-        paddingVertical: 3,
-    },
-    vazio: {
-        fontSize: 13,
-        color: "#aaa",
-        fontStyle: "italic",
-    },
+    btnExcluirTexto: { color: "#dc2626", fontSize: 13 },
+    vazio: { color: "#aaa", fontStyle: "italic", textAlign: "center", marginTop: 20 },
 });

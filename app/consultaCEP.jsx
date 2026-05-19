@@ -1,3 +1,12 @@
+// ============================================================
+// Consulta de CEP — busca de endereço via API ViaCEP
+//
+// Dependências:
+//   nenhuma nova — usa apenas React Native e fetch() nativo
+//
+// API usada: https://viacep.com.br (pública, sem chave)
+// ============================================================
+
 /**
  * Tela Consulta CEP - Busca de Endereço por CEP
  * 

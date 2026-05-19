@@ -1,3 +1,12 @@
+// ============================================================
+// Envio de Dados via HTTP POST com JSON
+//
+// Dependências:
+//   nenhuma nova — usa apenas React Native e fetch() nativo
+//
+// API usada: https://jsonplaceholder.typicode.com/posts (pública, sem chave)
+// ============================================================
+
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, ActivityIndicator, StyleSheet } from 'react-native';
 

@@ -1,3 +1,10 @@
+// ============================================================
+// GPS Estático — única leitura de localização
+//
+// Dependências:
+//   npx expo install expo-location (~18.1.6)
+// ============================================================
+
 /**
  * Tela GPS 1 - GPS Estático (uma única leitura)
  * 

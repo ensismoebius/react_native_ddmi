@@ -1,3 +1,14 @@
+// ============================================================
+// CRUD de Usuários com Express.js
+//
+// Dependências:
+//   nenhuma nova — usa apenas React Native e fetch() nativo
+//
+// Requisito externo:
+//   Servidor Express rodando em API_BASE (GET/POST/PUT/DELETE /users)
+//   Ajuste API_BASE para o IP local da máquina na rede
+// ============================================================
+
 import React, { useEffect, useState } from 'react';
 import {
     ActivityIndicator,

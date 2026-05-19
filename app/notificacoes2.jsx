@@ -1,4 +1,10 @@
-// npm install expo-notifications expo-device
+// ============================================================
+// Notificações Locais — com listeners de recebimento e interação
+//
+// Dependências:
+//   npx expo install expo-notifications (^0.31.4)
+//   npx expo install expo-device        (^7.1.4)
+// ============================================================
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Platform, Text, View } from 'react-native';

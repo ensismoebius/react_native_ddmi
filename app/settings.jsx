@@ -1,3 +1,12 @@
+// ============================================================
+// Configurações — tema e idioma do app via Context API
+//
+// Dependências:
+//   npx expo install i18next react-i18next expo-localization
+//   (i18next ^24.0.0, react-i18next ^17.0.6, expo-localization ~16.1.6)
+//   Contextos locais: contexts/AppContext.js, contexts/ThemeContext.js
+// ============================================================
+
 /**
  * Tela de Configurações (Settings)
  * 

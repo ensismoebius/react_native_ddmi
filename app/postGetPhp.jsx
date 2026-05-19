@@ -1,3 +1,14 @@
+// ============================================================
+// GET e POST para Backend PHP com Autenticação por API Key
+//
+// Dependências:
+//   nenhuma nova — usa apenas React Native e fetch() nativo
+//
+// Requisito externo:
+//   Servidor PHP com api.php acessível na rede local
+//   Ajuste API_URL para o IP da máquina (não use localhost no celular)
+// ============================================================
+
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, ActivityIndicator } from 'react-native';
 

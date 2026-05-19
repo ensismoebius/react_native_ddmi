@@ -41,7 +41,7 @@ import {
 } from "react-native";
 
 // Estilos centralizados (cores, bordas, sombras)
-import { cores, raio, sombra } from "../utilidades/estilos";
+import { cores, raio, sombra } from "../utils/estilos";
 
 // Hook de tradução (i18n)
 import { useTranslation } from "../hooks/useTranslation";

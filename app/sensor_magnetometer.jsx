@@ -2,9 +2,9 @@
 // Magnetômetro com Gráficos em Tempo Real
 //
 // Dependências:
-//   npx expo install expo-sensors   (^14.1.4)
+//   npx expo install expo-sensors   (~15.0.8)
 //   npx expo install victory-native (^37.3.6)
-//   npx expo install react-native-svg (^15.11.2)
+//   npx expo install react-native-svg (^15.12.1)
 // ============================================================
 
 import React, { useEffect, useState } from 'react';

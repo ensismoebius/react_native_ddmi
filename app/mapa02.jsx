@@ -2,8 +2,8 @@
 // Mapa ao Vivo — OpenStreetMap com posição GPS em tempo real
 //
 // Dependências:
-//   npx expo install expo-location        (~18.1.6)
-//   npx expo install react-native-webview (^13.13.5)
+//   npx expo install expo-location        (~19.0.8)
+//   npx expo install react-native-webview (^13.15.0)
 // ============================================================
 
 import React, { useEffect, useState } from 'react';

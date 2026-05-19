@@ -3,7 +3,7 @@
 //
 // Dependências:
 //   npx expo install victory-native   (^37.3.6)
-//   npx expo install react-native-svg (^15.11.2)
+//   npx expo install react-native-svg (^15.12.1)
 // ============================================================
 
 

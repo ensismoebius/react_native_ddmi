@@ -2,7 +2,7 @@
 // Acelerômetro — leitura dos eixos X, Y, Z em tempo real
 //
 // Dependências:
-//   npx expo install expo-sensors (^14.1.4)
+//   npx expo install expo-sensors (~15.0.8)
 // ============================================================
 
 import React, { useState, useEffect } from 'react';

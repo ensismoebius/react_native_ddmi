@@ -2,7 +2,7 @@
 // Mapa por Coordenadas — OpenStreetMap com entrada manual de lat/lon
 //
 // Dependências:
-//   npx expo install react-native-webview (^13.13.5)
+//   npx expo install react-native-webview (^13.15.0)
 // ============================================================
 
 import React, { useState } from 'react';

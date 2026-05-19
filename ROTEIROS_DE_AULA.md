@@ -52,6 +52,9 @@ Os alunos devem **digitar o código junto**, não copiar. O aprendizado vem do p
 ### Módulo 8 — Arquitetura
 - [Aula 20 — Context API: Tema e Idioma](#aula-20)
 
+### Módulo 9 — Manutenção e Infraestrutura
+- [Aula 21 — Upgrade do Expo SDK](#aula-21)
+
 ---
 
 <a name="aula-1"></a>
@@ -1652,6 +1655,158 @@ Mudar o tema na tela de Settings e mostrar as cores mudando em todo o app (cabe�
 
 ---
 
+<a name="aula-21"></a>
+## Aula 21 — Upgrade do Expo SDK
+
+**Arquivo:** `app/upgrade_guide.jsx`
+**Duração estimada:** 50 minutos
+**Pré-requisitos:** Aula 1 concluída; projeto funcionando com o SDK atual
+**Dependências:** nenhuma (apenas react-native core + `contexts/ThemeContext.js`)
+
+### Objetivo
+O aluno entende por que o SDK Expo é versionado, o que muda entre versões, e executa um upgrade guiado de ponta a ponta — sem quebrar o projeto.
+
+### Conceitos ensinados
+- Ciclo de release do Expo SDK (anual, alinhado com React Native)
+- Como o `expo install` difere do `npm install`
+- Flags `--check` e `--fix` do `npx expo install`
+- Conflitos de peer dependencies e como resolvê-los manualmente
+- `sdkVersion` no `app.json`
+- Breaking changes: onde procurar e o que costuma mudar
+
+### Roteiro
+
+#### 1. Abertura (5 min)
+"Todo ecossistema de software evolui. O Expo lança uma nova versão do SDK a cada alguns meses, trazendo suporte a versões mais novas do React Native, correções de bugs, novas APIs e melhorias de performance. Fazer o upgrade cedo — logo após o lançamento — é mais fácil do que acumular múltiplas versões para atualizar de uma vez. Hoje vamos ver o processo completo."
+
+#### 2. Teoria (10 min)
+
+**Por que o `npx expo install` existe?**
+
+"O `npm install` instala a versão mais recente de qualquer pacote. Mas no ecossistema Expo, cada SDK espera versões específicas dos pacotes nativos — `expo-camera`, `expo-sensors`, `react-native-reanimated` etc. Se você instalar versões erradas, o app pode compilar mas travar em runtime, ou simplesmente não funcionar no dispositivo.
+
+O `npx expo install` resolve isso: em vez de buscar a última versão, ele consulta o manifesto do SDK instalado e instala a versão exata esperada."
+
+```bash
+# NÃO faça:
+npm install expo-camera
+
+# Faça:
+npx expo install expo-camera
+```
+
+**O manifesto de compatibilidade**
+
+"O arquivo `node_modules/expo/bundledNativeModules.json` (ou equivalente por SDK) lista as versões corretas de cada pacote nativo para aquele SDK. As flags `--check` e `--fix` leem esse arquivo e comparam com o `package.json`."
+
+**`sdkVersion` no `app.json`**
+
+"O campo `sdkVersion` instrui o serviço Expo Application Services (EAS) sobre qual versão do SDK usar para builds na nuvem. Deve ser atualizado manualmente após o upgrade."
+
+#### 3. Demonstração ao vivo (20 min)
+Abrir o terminal e executar os passos do checklist da tela `upgrade_guide.jsx`:
+
+**Passo 1 — Consultar o changelog**
+"Antes de qualquer comando, abra `expo.dev/changelog` e leia os breaking changes. Identifique quais pacotes do seu projeto têm mudanças de API. Anote."
+
+**Passo 2 — Atualizar o pacote expo**
+```bash
+npm install expo@latest
+```
+"Isso atualiza apenas o pacote `expo`. As dependências nativas ainda estão na versão antiga — por isso precisamos do próximo passo."
+
+**Passo 3 — Verificar o que está desatualizado**
+```bash
+npx expo install --check
+```
+"Ele compara cada pacote nativo do `package.json` com o que o novo SDK espera. Lista tudo que está fora. Copie essa lista."
+
+**Passo 4 — Corrigir automaticamente**
+```bash
+npx expo install --fix
+```
+"Internamente chama `npm install` com as versões corretas. Se houver conflito de peer deps, vai falhar. Nesse caso, use a lista do passo anterior e instale manualmente:
+
+```bash
+# Exemplo (versões fictícias para ilustração):
+npm install expo-camera@~15.0.8 expo-sensors@~15.0.8 react-native-reanimated@~4.1.1
+```
+
+A técnica é: copiar o output do `--check`, formatar como argumento único do `npm install`."
+
+**Passo 5 — Atualizar `app.json`**
+```json
+{
+  "expo": {
+    "sdkVersion": "54.0.0"
+  }
+}
+```
+
+**Passo 6 — Checar breaking changes no código**
+"Abra cada arquivo que usa pacotes com breaking changes no changelog. Os mais comuns:
+- `expo-router`: mudanças na API de Drawer e Tabs entre versões major
+- `react-native-reanimated`: v3 → v4 remove `useAnimatedStyle` inline em alguns casos
+- `expo-av`: substituído por `expo-audio` e `expo-video` no SDK 51+"
+
+**Passo 7 — Atualizar comentários de dependência**
+"Nos arquivos fonte, cada bloco de comentário `// Dependências:` lista as versões. Após o upgrade, atualize esses números para documentar o SDK correto."
+
+**Passo 8 — Testar**
+```bash
+npx expo start
+```
+"Navegue por todas as telas. Priorize as que usam câmera, sensores, notificações e banco de dados — são as mais suscetíveis a breaking changes nativos."
+
+#### 4. Tela interativa (10 min)
+"Agora vamos à tela `Guia de Upgrade` no app. Ela implementa esse mesmo checklist como uma lista interativa. Cada item pode ser marcado como concluído — a barra de progresso avança conforme você completa os passos."
+
+Mostrar o código do componente `Passo` em `app/upgrade_guide.jsx`:
+```jsx
+function Passo({ passo, concluido, onToggle }) {
+  // ...
+  return (
+    <TouchableOpacity onPress={onToggle}>
+      {/* checkbox visual */}
+      {/* descrição */}
+      {/* comando em monospace */}
+      {/* aviso em amarelo se houver */}
+    </TouchableOpacity>
+  );
+}
+```
+
+"Esse padrão — lista de objetos + `Set` de IDs concluídos + toggle — é muito comum em apps de checklist, onboarding e tutoriais."
+
+Mostrar o estado:
+```jsx
+const [concluidos, setConcluidos] = useState(new Set());
+
+function togglePasso(id) {
+  setConcluidos(prev => {
+    const novo = new Set(prev);
+    if (novo.has(id)) novo.delete(id);
+    else novo.add(id);
+    return novo;
+  });
+}
+```
+
+"Por que `new Set(prev)` em vez de modificar o Set diretamente? Em React, o estado deve ser imutável — modificar o objeto existente não dispara re-render. Criar um novo `Set` garante que o React detecte a mudança."
+
+#### 5. Exercícios
+1. **Fácil:** Adicione um botão "Resetar" que limpa todos os checkboxes (volta `concluidos` para `new Set()`).
+2. **Médio:** Persista o progresso no AsyncStorage: ao reabrir o app, os passos marcados devem permanecer marcados.
+3. **Desafio:** Adicione um campo de texto em cada passo para o aluno anotar observações (ex: versão instalada, erro encontrado). Persista as anotações junto com o estado dos checkboxes.
+
+### Perguntas para fixação
+1. Qual a diferença entre `npm install expo@latest` e `npx expo install expo`?
+2. O que acontece se o `sdkVersion` no `app.json` ficar desatualizado?
+3. Por que criar `new Set(prev)` ao invés de usar `.add()` direto no `prev`?
+4. Em quais tipos de pacotes é mais provável encontrar breaking changes entre versões de SDK?
+
+---
+
 ## Apêndice — Ordem Sugerida por Semana
 
 | Semana | Aulas | Foco |
@@ -1667,7 +1822,8 @@ Mudar o tema na tela de Settings e mostrar as cores mudando em todo o app (cabe�
 | 9 | 16, 17 | Listas e mídia |
 | 10 | 18, 19 | Câmera e háptico |
 | 11 | 20 | Arquitetura, Context API |
-| 12 | — | Projeto final integrador |
+| 12 | 21 | Manutenção: upgrade do SDK |
+| 13 | — | Projeto final integrador |
 
 ---
 

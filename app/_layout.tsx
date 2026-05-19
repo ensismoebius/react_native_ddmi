@@ -2,11 +2,11 @@
 // Layout Raiz — entry point do Expo Router com Drawer Navigator
 //
 // Dependências:
-//   npx expo install expo-router                    (~5.1.11)
-//   npx expo install @expo/vector-icons             (^14.1.0)
+//   npx expo install expo-router                    (~6.0.23)
+//   npx expo install @expo/vector-icons             (^15.1.1)
 //   npx expo install react-native-safe-area-context (5.4.0)
-//   npx expo install react-native-gesture-handler   (~2.24.0)
-//   npx expo install @react-navigation/drawer       (^7.9.9)
+//   npx expo install react-native-gesture-handler   (~2.28.0)
+//   npx expo install @react-navigation/drawer       (^7.3.9)
 //   npx expo install @react-navigation/native       (^7.1.6)
 // ============================================================
 

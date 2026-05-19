@@ -2,8 +2,8 @@
 // Notificações Locais — com som customizado (assets/sounds/oloco.mp3)
 //
 // Dependências:
-//   npx expo install expo-notifications (^0.31.4)
-//   npx expo install expo-device        (^7.1.4)
+//   npx expo install expo-notifications (^0.32.17)
+//   npx expo install expo-device        (~8.0.10)
 // ============================================================
 
 import React, { useEffect, useRef, useState } from 'react';

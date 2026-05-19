@@ -2,8 +2,8 @@
 // Planejador de Rotas — Nominatim (geocoding) + OSRM + Leaflet via WebView
 //
 // Dependências:
-//   npx expo install expo-location        (~18.1.6)
-//   npx expo install react-native-webview (^13.13.5)
+//   npx expo install expo-location        (~19.0.8)
+//   npx expo install react-native-webview (^13.15.0)
 //
 // APIs externas (gratuitas, sem chave):
 //   Nominatim: https://nominatim.openstreetmap.org (requer User-Agent)

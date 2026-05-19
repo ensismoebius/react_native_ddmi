@@ -209,7 +209,13 @@ export const DRAWER_SCREENS = [
     title: 'Test Lab',       // Título no header
     icon: 'flask-outline'    // Ícone: laboratório
   },
-  { 
+  {
+    name: 'upgrade_guide',          // Arquivo: app/upgrade_guide.jsx
+    label: 'Guia de Upgrade',       // Nome no menu
+    title: 'Upgrade do SDK',        // Título no header
+    icon: 'arrow-up-circle-outline', // Ícone: seta para cima
+  },
+  {
     name: 'settings',         // Arquivo: app/settings.jsx
     label: 'Configurações',   // Nome no menu
     title: 'Configurações',   // Título no header
